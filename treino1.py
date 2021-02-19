@@ -100,11 +100,26 @@ devolva uma lista com as palavras nela contidas ordenada por ordem de frequênci
 da mais alta para a mais baixa. Palavras com a mesma frequência devem ser listadas 
 por ordem alfabética.
 """
+def frequencia(texto):
+    dic ={}
+    lista = texto.split()
+    for i in lista:
+        if i not in dic:
+            dic[i] = 1
+        else:
+            dic[i] +=1
+    lista = sorted(dic.items())
+    lista.sort(key=lambda t : t[1], reverse=True)
+    lista = [l[0] for l in lista]
+    return lista
+
+
+# outra versao
 
 from collections import Counter
 
-def frequencia(texto):
-    lista = texto.split(' ')
+def frequencia2(texto):
+    lista = texto.split()
     lista.sort(key=Counter(lista).get, reverse=True)
     lista = list(dict.fromkeys(lista))
     return lista
