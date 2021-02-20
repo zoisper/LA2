@@ -272,12 +272,12 @@ def robot(comandos):
 				p = (p + 3) % 4
 			elif p >=2:
 				aux[p] += 1
-				movs[p] = max(movs[p], aux[p])
 				aux[(p+2)%4] +=1
+				movs[p] = max(movs[p], aux[p])
 			else:
 				aux[p] -= 1
-				movs[p] = min(movs[p], aux[p])
 				aux[(p+2)%4] -=1
+				movs[p] = min(movs[p], aux[p])
 		result.append((movs[0],movs[1],movs[2],movs[3]))
 	return result
 
