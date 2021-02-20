@@ -80,7 +80,9 @@ e produz a soma dos seus factores primos distintos.
 '''
 
 def primo(n):
-    for i in range(2, n-1):
+    if n <= 1:
+    	return False
+    for i in range(2, n):
         if n%i == 0:
             return False
     return True
@@ -123,6 +125,161 @@ def frequencia2(texto):
     lista.sort(key=Counter(lista).get, reverse=True)
     lista = list(dict.fromkeys(lista))
     return lista
+
+
+    '''
+
+Implemente uma função que calcula a tabela classificativa de um campeonato de
+futebol. A função recebe uma lista de resultados de jogos (tuplo com os nomes das
+equipas e os respectivos golos) e deve devolver a tabela classificativa (lista com 
+as equipas e respectivos pontos), ordenada decrescentemente pelos pontos. Em
+caso de empate neste critério, deve ser usada a diferença entre o número total
+de golos marcados e sofridos para desempatar, e, se persistir o empate, o nome
+da equipa.
+
+'''
+
+def tabela(jogos):
+    equipas = dict((e,[0,0]) for (e,g,e,g) in jogos)
+    for i in jogos:
+        if i[1] > i[3]:
+            equipas[i[0]][0] +=3
+        elif i[1] < i[3]:
+            equipas[i[2]][0] +=3
+        else:
+            equipas[i[0]][0] +=1 
+            equipas[i[2]][0] +=1
+        equipas[i[0]][1] += i[1]
+        equipas[i[2]][1] += i[3]
+        equipas[i[0]][1] -= i[3]
+        equipas[i[2]][1] -= i[1]
+    classificacao = list(equipas.items())
+    classificacao.sort()
+    classificacao.sort(key=lambda e : e[1][1], reverse=True)
+    classificacao.sort(key=lambda e : e[1][0], reverse=True)
+    classificacao = [e[0] for e in classificacao]
+    return classificacao
+
+
+"""
+Um hacker teve acesso a um log de transações com cartões de
+crédito. O log é uma lista de tuplos, cada um com os dados de uma transação,
+nomedamente o cartão que foi usado, podendo alguns dos números estar
+ocultados com um *, e o email do dono do cartão.
+
+Pretende-se que implemente uma função que ajude o hacker a 
+reconstruir os cartões de crédito, combinando os números que estão
+visíveis em diferentes transações. Caso haja uma contradição nos números 
+visíveis deve ser dada prioridade à transção mais recente, i.é, a que
+aparece mais tarde no log.
+
+A função deve devolver uma lista de tuplos, cada um com um cartão e um email,
+dando prioridade aos cartões com mais digitos descobertos e, em caso de igualdade
+neste critério, aos emails menores (em ordem lexicográfica).
+"""
+
+def hacker(log):
+	dados = dict((e,c) for (c,e) in log)
+	log = list(map(lambda tuplo : ([char for char in tuplo[0]], tuplo[1]),log))
+	troca = lambda x,y : y if x == '*' else x
+	intersecta = lambda x,y : map(troca, x,y)
+	for i in range (len(log)-1):
+		for j in range(i+1, len(log)):
+			if log[i][1] == log[j][1]:
+				dados[log[i][1]] = "".join(intersecta(log[j][0], log[i][0]))
+	result = sorted(dados.items())
+	result.sort(key=lambda x : sum(map(lambda l: 0 if l == '*' else 1, x[1] )), reverse=True)
+	return result
+
+
+
+
+
+'''
+Pretende-se que implemente uma função que detecte códigos ISBN inválidos. 
+Um código ISBN é constituído por 13 digitos, sendo o último um digito de controlo.
+Este digito de controlo é escolhido de tal forma que a soma de todos os digitos, 
+cada um multiplicado por um peso que é alternadamente 1 ou 3, seja um múltiplo de 10.
+A função recebe um dicionário que associa livros a ISBNs,
+e deverá devolver a lista ordenada de todos os livros com ISBNs inválidos.
+'''
+
+def valida(isbn):
+    soma = 0
+    for i in range(len(isbn)):
+        if i%2 == 0:
+            soma += eval(isbn[i])
+        else:
+            soma += eval(isbn[i])*3
+    return soma % 10 == 0
+
+
+def isbn(livros):
+    result = []
+    for i in livros:
+        if not valida(livros[i]):
+        	result.append(i)
+    result.sort()
+    return result
+
+
+'''
+Implemente uma função que determine qual a menor sequência de caracters que
+contém n repetições de uma determinada palavra
+'''
+
+def repete(palavra,n):
+    palavra = [char for char in palavra]
+    aux = palavra.copy()
+    size = len(palavra)
+    for i in range(n-1):
+    	if aux[0] == aux[-1]:
+    		palavra.pop()
+    	palavra.extend(aux)
+    palavra = "".join(palavra)
+    return palavra
+
+
+'''
+Neste problema prentede-se que implemente uma função que calcula o rectângulo onde se movimenta um robot.
+
+Inicialmente o robot encontra-se na posição (0,0) virado para cima e irá receber uma sequência de comandos numa string.
+Existem quatro tipos de comandos que o robot reconhece:
+  'A' - avançar na direcção para o qual está virado
+  'E' - virar-se 90º para a esquerda
+  'D' - virar-se 90º para a direita 
+  'H' - parar e regressar à posição inicial virado para cima
+  
+Quando o robot recebe o comando 'H' devem ser guardadas as 4 coordenadas (minímo no eixo dos X, mínimo no eixo dos Y, máximo no eixo dos X, máximo no eixo dos Y) que definem o rectângulo 
+onde se movimentou desde o início da sequência de comandos ou desde o último comando 'H'.
+
+A função deve retornar a lista de todas os rectangulos (tuplos com 4 inteiros)
+'''
+
+def robot(comandos):
+	result = []
+	comandos = comandos.split('H')
+	if comandos[-1] == '':
+		comandos.pop()
+	for i in comandos:
+		aux = [0,0,0,0]
+		movs = [0,0,0,0]
+		p = 3
+		for j in i:
+			if j == 'E':
+				p = (p + 1) % 4
+			elif j == 'D':
+				p = (p + 3) % 4
+			elif p >=2:
+				aux[p] += 1
+				movs[p] = max(movs[p], aux[p])
+				aux[(p+2)%4] +=1
+			else:
+				aux[p] -= 1
+				movs[p] = min(movs[p], aux[p])
+				aux[(p+2)%4] -=1
+		result.append((movs[0],movs[1],movs[2],movs[3]))
+	return result
 
 
 
