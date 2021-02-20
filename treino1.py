@@ -68,10 +68,10 @@ def cruzamentos(ruas):
             dic[i[0]] +=1
         if i[-1] not in dic:
             dic[i[-1]] = 1
-        else:
-            dic[i[-1]] +=1
+        elif i[0] != i[-1]:
+        	dic[i[-1]] +=1
     lista = sorted(dic.items())
-    lista.sort(key=lambda t : (t[1], t[0]))
+    lista.sort(key=lambda t : t[1])
     return lista
 
 '''
