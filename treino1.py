@@ -282,4 +282,3 @@ def robot(comandos):
 
 
 
-log = [("****1234********","maria@mail.pt"),("0000************","ze@gmail.com"),("****1111****3333","ze@gmail.com")]
