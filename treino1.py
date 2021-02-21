@@ -13,19 +13,20 @@ alocados a nenhum projecto, ordenada por ordem de número de aluno.
 """
 
 def aloca(prefs):
-    colocados = []
-    l = 0;
-    while (l < len(prefs)):
-        x = min(prefs)
-        j = 0
-        while (x in prefs) and (j < len(prefs[x])):
-            if prefs[x][j] not in colocados:
-                colocados.append(prefs[x][j])
-                del prefs[x]
-            else:
-                j = j + 1
-        l = l + 1
-    return list(prefs)
+	colocados = []
+	l = 0;
+	while (l < len(prefs)):
+		x = min(prefs)
+		j = 0
+		while (x in prefs) and (j < len(prefs[x])):
+			if prefs[x][j] not in colocados:
+				colocados.append(prefs[x][j])
+				del prefs[x]
+				l -= 1
+			else:
+				j = j + 1
+		l = l + 1
+	return list(prefs)
 
 
 '''
@@ -35,9 +36,9 @@ devem ser listadas por ordem lexicográfica do nome completo.
 '''
 
 def apelidos(nomes):
-    nomes.sort()
-    nomes.sort(key=lambda t: len(t.split()))
-    return nomes
+	nomes.sort()
+	nomes.sort(key=lambda t: len(t.split()))
+	return nomes
 
 
 
@@ -60,19 +61,19 @@ nível de criticidade deverão ser listados por ordem alfabética.
 '''
 
 def cruzamentos(ruas):
-    dic = {}
-    for i in ruas:
-        if i[0] not in dic:
-            dic[i[0]] = 1
-        else:
-            dic[i[0]] +=1
-        if i[-1] not in dic:
-            dic[i[-1]] = 1
-        elif i[0] != i[-1]:
-        	dic[i[-1]] +=1
-    lista = sorted(dic.items())
-    lista.sort(key=lambda t : t[1])
-    return lista
+	dic = {}
+	for i in ruas:
+		if i[0] not in dic:
+			dic[i[0]] = 1
+		else:
+			dic[i[0]] +=1
+		if i[-1] not in dic:
+			dic[i[-1]] = 1
+		elif i[0] != i[-1]:
+			dic[i[-1]] +=1
+	lista = sorted(dic.items())
+	lista.sort(key=lambda t : t[1])
+	return lista
 
 '''
 Defina uma função que recebe um número positivo
@@ -80,21 +81,21 @@ e produz a soma dos seus factores primos distintos.
 '''
 
 def primo(n):
-    if n <= 1:
-    	return False
-    for i in range(2, n):
-        if n%i == 0:
-            return False
-    return True
+	if n <= 1:
+		return False
+	for i in range(2, n):
+		if n%i == 0:
+			return False
+	return True
 
 def factoriza(n):
-    r = 0
-    for i in range (2, n):
-        if primo(i) and n%i == 0:
-            r += i
-            while n%i == 0:
-                n /= i
-    return r
+	r = 0
+	for i in range (2, n):
+		if primo(i) and n%i == 0:
+			r += i
+			while n%i == 0:
+				n /= i
+	return r
 
 """
 Neste problem pretende-se que defina uma função que, dada uma string com palavras, 
@@ -103,17 +104,17 @@ da mais alta para a mais baixa. Palavras com a mesma frequência devem ser lista
 por ordem alfabética.
 """
 def frequencia(texto):
-    dic ={}
-    lista = texto.split()
-    for i in lista:
-        if i not in dic:
-            dic[i] = 1
-        else:
-            dic[i] +=1
-    lista = sorted(dic.items())
-    lista.sort(key=lambda t : t[1], reverse=True)
-    lista = [l[0] for l in lista]
-    return lista
+	dic ={}
+	lista = texto.split()
+	for i in lista:
+		if i not in dic:
+			dic[i] = 1
+		else:
+			dic[i] +=1
+	lista = sorted(dic.items())
+	lista.sort(key=lambda t : t[1], reverse=True)
+	lista = [l[0] for l in lista]
+	return lista
 
 
 # outra versao
@@ -121,13 +122,13 @@ def frequencia(texto):
 from collections import Counter
 
 def frequencia2(texto):
-    lista = texto.split()
-    lista.sort(key=Counter(lista).get, reverse=True)
-    lista = list(dict.fromkeys(lista))
-    return lista
+	lista = texto.split()
+	lista.sort(key=Counter(lista).get, reverse=True)
+	lista = list(dict.fromkeys(lista))
+	return lista
 
 
-    '''
+	'''
 
 Implemente uma função que calcula a tabela classificativa de um campeonato de
 futebol. A função recebe uma lista de resultados de jogos (tuplo com os nomes das
@@ -140,25 +141,25 @@ da equipa.
 '''
 
 def tabela(jogos):
-    equipas = dict((e,[0,0]) for (e,g,e,g) in jogos)
-    for i in jogos:
-        if i[1] > i[3]:
-            equipas[i[0]][0] +=3
-        elif i[1] < i[3]:
-            equipas[i[2]][0] +=3
-        else:
-            equipas[i[0]][0] +=1 
-            equipas[i[2]][0] +=1
-        equipas[i[0]][1] += i[1]
-        equipas[i[2]][1] += i[3]
-        equipas[i[0]][1] -= i[3]
-        equipas[i[2]][1] -= i[1]
-    classificacao = list(equipas.items())
-    classificacao.sort()
-    classificacao.sort(key=lambda e : e[1][1], reverse=True)
-    classificacao.sort(key=lambda e : e[1][0], reverse=True)
-    classificacao = [e[0] for e in classificacao]
-    return classificacao
+	equipas = dict((e,[0,0]) for (e,g,e,g) in jogos)
+	for i in jogos:
+		if i[1] > i[3]:
+			equipas[i[0]][0] +=3
+		elif i[1] < i[3]:
+			equipas[i[2]][0] +=3
+		else:
+			equipas[i[0]][0] +=1 
+			equipas[i[2]][0] +=1
+		equipas[i[0]][1] += i[1]
+		equipas[i[2]][1] += i[3]
+		equipas[i[0]][1] -= i[3]
+		equipas[i[2]][1] -= i[1]
+	classificacao = list(equipas.items())
+	classificacao.sort()
+	classificacao.sort(key=lambda e : e[1][1], reverse=True)
+	classificacao.sort(key=lambda e : e[1][0], reverse=True)
+	classificacao = [(e[0],e[1][0]) for e in classificacao]
+	return classificacao
 
 
 """
@@ -189,6 +190,7 @@ def hacker(log):
 				dados[log[i][1]] = "".join(intersecta(log[j][0], log[i][0]))
 	result = sorted(dados.items())
 	result.sort(key=lambda x : sum(map(lambda l: 0 if l == '*' else 1, x[1] )), reverse=True)
+	result = [(b,a) for (a,b) in result]
 	return result
 
 
@@ -205,22 +207,22 @@ e deverá devolver a lista ordenada de todos os livros com ISBNs inválidos.
 '''
 
 def valida(isbn):
-    soma = 0
-    for i in range(len(isbn)):
-        if i%2 == 0:
-            soma += eval(isbn[i])
-        else:
-            soma += eval(isbn[i])*3
-    return soma % 10 == 0
+	soma = 0
+	for i in range(len(isbn)):
+		if i%2 == 0:
+			soma += eval(isbn[i])
+		else:
+			soma += eval(isbn[i])*3
+	return soma % 10 == 0
 
 
 def isbn(livros):
-    result = []
-    for i in livros:
-        if not valida(livros[i]):
-        	result.append(i)
-    result.sort()
-    return result
+	result = []
+	for i in livros:
+		if not valida(livros[i]):
+			result.append(i)
+	result.sort()
+	return result
 
 
 '''
@@ -229,14 +231,14 @@ contém n repetições de uma determinada palavra
 '''
 
 def repete(palavra,n):
-    palavra = list(palavra)
-    aux = palavra.copy()
-    for i in range(n-1):
-    	if aux[0] == aux[-1]:
-    		palavra.pop()
-    	palavra.extend(aux)
-    palavra = "".join(palavra)
-    return palavra
+	palavra = list(palavra)
+	aux = palavra.copy()
+	for i in range(n-1):
+		if aux[0] == aux[-1]:
+			palavra.pop()
+		palavra.extend(aux)
+	palavra = "".join(palavra)
+	return palavra
 
 
 '''
@@ -281,4 +283,8 @@ def robot(comandos):
 	return result
 
 
+
+prefs = {30000:[1],20000:[2],10000:[3]}
+
+print(aloca(prefs))
 
