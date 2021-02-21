@@ -180,7 +180,7 @@ neste critério, aos emails menores (em ordem lexicográfica).
 
 def hacker(log):
 	dados = dict((e,c) for (c,e) in log)
-	log = list(map(lambda tuplo : ([char for char in tuplo[0]], tuplo[1]),log))
+	log = list(map(lambda tuplo : (list(tuplo[0]), tuplo[1]),log))
 	troca = lambda x,y : y if x == '*' else x
 	intersecta = lambda x,y : map(troca, x,y)
 	for i in range (len(log)-1):
@@ -229,7 +229,7 @@ contém n repetições de uma determinada palavra
 '''
 
 def repete(palavra,n):
-    palavra = [char for char in palavra]
+    palavra = list(palavra)
     aux = palavra.copy()
     for i in range(n-1):
     	if aux[0] == aux[-1]:
@@ -277,7 +277,7 @@ def robot(comandos):
 				aux[p] -= 1
 				aux[(p+2)%4] -=1
 				movs[p] = min(movs[p], aux[p])
-		result.append((movs[0],movs[1],movs[2],movs[3]))
+		result.append(tuple(movs))
 	return result
 
 
