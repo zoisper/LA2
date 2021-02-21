@@ -13,20 +13,15 @@ alocados a nenhum projecto, ordenada por ordem de número de aluno.
 """
 
 def aloca(prefs):
-	colocados = []
-	l = 0;
-	while (l < len(prefs)):
-		x = min(prefs)
-		j = 0
-		while (x in prefs) and (j < len(prefs[x])):
-			if prefs[x][j] not in colocados:
-				colocados.append(prefs[x][j])
-				del prefs[x]
-				l -= 1
-			else:
-				j = j + 1
-		l = l + 1
-	return list(prefs)
+    alunos = sorted(prefs)
+    escolhidos = []
+    for i in alunos:
+        for j in prefs[i]:
+            if j not in escolhidos:
+                escolhidos.append(j)
+                del prefs[i]
+                break
+    return sorted(prefs)
 
 
 '''
@@ -36,9 +31,9 @@ devem ser listadas por ordem lexicográfica do nome completo.
 '''
 
 def apelidos(nomes):
-	nomes.sort()
-	nomes.sort(key=lambda t: len(t.split()))
-	return nomes
+    nomes.sort()
+    nomes.sort(key=lambda x : len(x.split()))
+    return nomes
 
 
 
@@ -61,19 +56,19 @@ nível de criticidade deverão ser listados por ordem alfabética.
 '''
 
 def cruzamentos(ruas):
-	dic = {}
-	for i in ruas:
-		if i[0] not in dic:
-			dic[i[0]] = 1
-		else:
-			dic[i[0]] +=1
-		if i[-1] not in dic:
-			dic[i[-1]] = 1
-		elif i[0] != i[-1]:
-			dic[i[-1]] +=1
-	lista = sorted(dic.items())
-	lista.sort(key=lambda t : t[1])
-	return lista
+dic = {}
+for i in ruas:
+    if i[0] not in dic:
+        dic[i[0]] = 1
+    else:
+        dic[i[0]] += 1
+    if i[-1] not in dic:
+        dic[i[-1]] = 1
+    elif i[0] != i[-1]:
+        dic[i[-1]] +=1
+result = sorted(dic.items())
+result.sort(key=lambda x : x[1])
+return result
 
 '''
 Defina uma função que recebe um número positivo
