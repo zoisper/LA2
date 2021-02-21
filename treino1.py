@@ -231,7 +231,6 @@ contém n repetições de uma determinada palavra
 def repete(palavra,n):
     palavra = [char for char in palavra]
     aux = palavra.copy()
-    size = len(palavra)
     for i in range(n-1):
     	if aux[0] == aux[-1]:
     		palavra.pop()
@@ -283,3 +282,4 @@ def robot(comandos):
 
 
 
+log = [("****1234********","maria@mail.pt"),("0000************","ze@gmail.com"),("****1111****3333","ze@gmail.com")]
