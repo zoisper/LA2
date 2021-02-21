@@ -56,19 +56,19 @@ nível de criticidade deverão ser listados por ordem alfabética.
 '''
 
 def cruzamentos(ruas):
-dic = {}
-for i in ruas:
-    if i[0] not in dic:
-        dic[i[0]] = 1
-    else:
-        dic[i[0]] += 1
-    if i[-1] not in dic:
-        dic[i[-1]] = 1
-    elif i[0] != i[-1]:
-        dic[i[-1]] +=1
-result = sorted(dic.items())
-result.sort(key=lambda x : x[1])
-return result
+	dic = {}
+	for i in ruas:
+	    if i[0] not in dic:
+	        dic[i[0]] = 1
+	    else:
+	        dic[i[0]] += 1
+	    if i[-1] not in dic:
+	        dic[i[-1]] = 1
+	    elif i[0] != i[-1]:
+	        dic[i[-1]] +=1
+	result = sorted(dic.items())
+	result.sort(key=lambda x : x[1])
+	return result
 
 '''
 Defina uma função que recebe um número positivo
@@ -278,8 +278,4 @@ def robot(comandos):
 	return result
 
 
-
-prefs = {30000:[1],20000:[2],10000:[3]}
-
-print(aloca(prefs))
 
