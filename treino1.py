@@ -75,22 +75,27 @@ Defina uma função que recebe um número positivo
 e produz a soma dos seus factores primos distintos.
 '''
 
-def primo(n):
-	if n <= 1:
-		return False
-	for i in range(2, n):
-		if n%i == 0:
-			return False
-	return True
+def isPrime(n):
+    if n <=1:
+        result = False
+    else:
+        result = True
+        for i in range (2, n//2 +1): # podia ser range (2, n) mas assim a função fica mais eficiente porque n nunca sera dividio por um numero superior a n//2
+            if n%i == 0:
+                result = False
+                break
+    return result
+
 
 def factoriza(n):
-	r = 0
-	for i in range (2, n):
-		if primo(i) and n%i == 0:
-			r += i
-			while n%i == 0:
-				n /= i
-	return r
+    result = 0
+    for i in range (2, n//2 +1): # podia ser range (2, n) mas assim a função fica mais eficiente porque n nunca sera dividio por um numero superior a n//2
+        if isPrime(i) and n%i == 0:
+            result += i
+            while n%i == 0:
+                n /= i
+    return result
+
 
 """
 Neste problem pretende-se que defina uma função que, dada uma string com palavras, 
@@ -99,17 +104,17 @@ da mais alta para a mais baixa. Palavras com a mesma frequência devem ser lista
 por ordem alfabética.
 """
 def frequencia(texto):
-	dic ={}
-	lista = texto.split()
-	for i in lista:
-		if i not in dic:
-			dic[i] = 1
-		else:
-			dic[i] +=1
-	lista = sorted(dic.items())
-	lista.sort(key=lambda t : t[1], reverse=True)
-	lista = [l[0] for l in lista]
-	return lista
+    pals = {}
+    texto = texto.split()
+    for i in texto:
+        if i not in pals:
+            pals[i] = 1
+        else:
+            pals[i] +=1
+    result = sorted(pals.items())
+    result.sort(key=lambda p : p[1], reverse=True)
+    result = [r[0] for r in result]
+    return result
 
 
 # outra versao
@@ -136,25 +141,23 @@ da equipa.
 '''
 
 def tabela(jogos):
-	equipas = dict((e,[0,0]) for (e,g,e,g) in jogos)
-	for i in jogos:
-		if i[1] > i[3]:
-			equipas[i[0]][0] +=3
-		elif i[1] < i[3]:
-			equipas[i[2]][0] +=3
-		else:
-			equipas[i[0]][0] +=1 
-			equipas[i[2]][0] +=1
-		equipas[i[0]][1] += i[1]
-		equipas[i[2]][1] += i[3]
-		equipas[i[0]][1] -= i[3]
-		equipas[i[2]][1] -= i[1]
-	classificacao = list(equipas.items())
-	classificacao.sort()
-	classificacao.sort(key=lambda e : e[1][1], reverse=True)
-	classificacao.sort(key=lambda e : e[1][0], reverse=True)
-	classificacao = [(e[0],e[1][0]) for e in classificacao]
-	return classificacao
+    classificacao = dict((e,[0,0]) for (e,g,e,g) in jogos)
+    for e in jogos:
+        score = e[1] - e[3]
+        if score > 0:
+            classificacao [e[0]][0] +=3
+        elif score < 0:
+            classificacao [e[2]][0] +=3
+        else:
+            classificacao [e[0]][0] +=1
+            classificacao [e[2]][0] +=1
+        classificacao [e[0]][1] += score
+        classificacao [e[2]][1] -= score
+    result = sorted(classificacao.items())
+    result.sort(key=lambda x : x[1][1], reverse=True)
+    result.sort(key=lambda x : x[1][0], reverse=True)
+    result = [(r[0],r[1][0]) for r in result]
+    return result
 
 
 """
@@ -279,3 +282,13 @@ def robot(comandos):
 
 
 
+def isPrime(n):
+    if n <=1:
+        result = False
+    else:
+        result = True
+        for i in range (2, n//2 +1):
+            if n%i == 0:
+                result = False
+                break
+    return result
