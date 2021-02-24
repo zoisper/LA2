@@ -191,6 +191,22 @@ def hacker(log):
 	result = [(b,a) for (a,b) in result]
 	return result
 
+	#ou 
+
+	def hacker(log):
+    hack = {}
+    troca = lambda x,y : x if y == '*' else y
+    intersecta = lambda x,y : "".join(map(troca, x,y))
+    for i in log:
+        if i[1] not in hack:
+            hack[i[1]] = i[0]
+        else:
+            hack[i[1]] = intersecta(hack[i[1]],i[0])
+    result = sorted(hack.items())
+    result = [(i[1],i[0]) for i in result]
+    result.sort(key=lambda x : sum(map(lambda l : 0 if l == "*" else 1, x[0])), reverse=True)
+    return result
+
 
 
 
@@ -281,14 +297,3 @@ def robot(comandos):
 	return result
 
 
-
-def isPrime(n):
-    if n <=1:
-        result = False
-    else:
-        result = True
-        for i in range (2, n//2 +1):
-            if n%i == 0:
-                result = False
-                break
-    return result
