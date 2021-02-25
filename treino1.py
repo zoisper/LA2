@@ -245,14 +245,14 @@ contém n repetições de uma determinada palavra
 '''
 
 def repete(palavra,n):
-	palavra = list(palavra)
-	aux = palavra.copy()
-	for i in range(n-1):
-		if aux[0] == aux[-1]:
-			palavra.pop()
-		palavra.extend(aux)
-	palavra = "".join(palavra)
-	return palavra
+    aux = list(palavra)
+    result = list(palavra)
+    for i in range (n-1):
+        if aux[0] == aux[-1]:
+            result.pop()
+        result.extend(aux)
+    result = "".join(result)
+    return result
 
 
 '''
@@ -272,28 +272,28 @@ A função deve retornar a lista de todas os rectangulos (tuplos com 4 inteiros)
 '''
 
 def robot(comandos):
-	result = []
-	comandos = comandos.split('H')
-	if comandos[-1] == '':
-		comandos.pop()
-	for i in comandos:
-		aux = [0,0,0,0]
-		movs = [0,0,0,0]
-		p = 3
-		for j in i:
-			if j == 'E':
-				p = (p + 1) % 4
-			elif j == 'D':
-				p = (p + 3) % 4
-			elif p >=2:
-				aux[p] += 1
-				aux[(p+2)%4] +=1
-				movs[p] = max(movs[p], aux[p])
-			else:
-				aux[p] -= 1
-				aux[(p+2)%4] -=1
-				movs[p] = min(movs[p], aux[p])
-		result.append(tuple(movs))
-	return result
+    result = []
+    entrada = comandos.split('H')
+    if entrada[-1] == '':
+        entrada.pop()
+    for i in entrada:
+        movs = [0,0,0,0]
+        aux = [0,0,0,0]
+        p = 3
+        for j in i:
+            if j == 'E':
+                p = (p+1)%4
+            elif j == 'D':
+                p = (p+3)%4
+            elif p <2:
+                aux[p] -= 1
+                aux[(p+2)%4] -=1
+                movs[p] = min(movs[p],aux[p])
+            else:
+                aux[p] += 1
+                aux[(p+2)%4] +=1
+                movs[p] = max(movs[p], aux[p])
+        result.append(tuple(movs))
+    return result
 
 
