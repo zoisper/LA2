@@ -14,14 +14,16 @@ alocados a nenhum projecto, ordenada por ordem de número de aluno.
 
 def aloca(prefs):
     alunos = sorted(prefs)
+    candidatos = prefs.copy()
     escolhidos = []
     for i in alunos:
-        for j in prefs[i]:
+        for j in candidatos[i]:
             if j not in escolhidos:
                 escolhidos.append(j)
-                del prefs[i]
+                del candidatos[i]
                 break
-    return sorted(prefs)
+    result = sorted(candidatos)
+    return result
 
 
 '''
@@ -31,10 +33,9 @@ devem ser listadas por ordem lexicográfica do nome completo.
 '''
 
 def apelidos(nomes):
-    nomes.sort()
-    nomes.sort(key=lambda x : len(x.split()))
-    return nomes
-
+    result = sorted(nomes)
+    result.sort(key=lambda x : len(x.split()))
+    return result
 
 
 '''
@@ -70,30 +71,21 @@ def cruzamentos(ruas):
 	result.sort(key=lambda x : x[1])
 	return result
 
+
 '''
 Defina uma função que recebe um número positivo
 e produz a soma dos seus factores primos distintos.
 '''
 
-def isPrime(n):
-    if n <=1:
-        result = False
-    else:
-        result = True
-        for i in range (2, n//2 +1): # podia ser range (2, n) mas assim a função fica mais eficiente porque n nunca sera dividio por um numero superior a n//2
-            if n%i == 0:
-                result = False
-                break
-    return result
-
-
 def factoriza(n):
     result = 0
-    for i in range (2, n//2 +1): # podia ser range (2, n) mas assim a função fica mais eficiente porque n nunca sera dividio por um numero superior a n//2
-        if isPrime(i) and n%i == 0:
+    for i in range(2, n//2 +1): 
+        if n%i == 0:
             result += i
-            while n%i == 0:
-                n /= i
+            while (n%i == 0):
+                n //= i
+        if n < i:
+            break
     return result
 
 
@@ -103,6 +95,7 @@ devolva uma lista com as palavras nela contidas ordenada por ordem de frequênci
 da mais alta para a mais baixa. Palavras com a mesma frequência devem ser listadas 
 por ordem alfabética.
 """
+
 def frequencia(texto):
     pals = {}
     texto = texto.split()
@@ -117,19 +110,7 @@ def frequencia(texto):
     return result
 
 
-# outra versao
-
-from collections import Counter
-
-def frequencia2(texto):
-	lista = texto.split()
-	lista.sort(key=Counter(lista).get, reverse=True)
-	lista = list(dict.fromkeys(lista))
-	return lista
-
-
-	'''
-
+'''
 Implemente uma função que calcula a tabela classificativa de um campeonato de
 futebol. A função recebe uma lista de resultados de jogos (tuplo com os nomes das
 equipas e os respectivos golos) e deve devolver a tabela classificativa (lista com 
@@ -137,7 +118,6 @@ as equipas e respectivos pontos), ordenada decrescentemente pelos pontos. Em
 caso de empate neste critério, deve ser usada a diferença entre o número total
 de golos marcados e sofridos para desempatar, e, se persistir o empate, o nome
 da equipa.
-
 '''
 
 def tabela(jogos):
@@ -178,22 +158,6 @@ neste critério, aos emails menores (em ordem lexicográfica).
 """
 
 def hacker(log):
-	dados = dict((e,c) for (c,e) in log)
-	log = list(map(lambda tuplo : (list(tuplo[0]), tuplo[1]),log))
-	troca = lambda x,y : y if x == '*' else x
-	intersecta = lambda x,y : map(troca, x,y)
-	for i in range (len(log)-1):
-		for j in range(i+1, len(log)):
-			if log[i][1] == log[j][1]:
-				dados[log[i][1]] = "".join(intersecta(log[j][0], log[i][0]))
-	result = sorted(dados.items())
-	result.sort(key=lambda x : sum(map(lambda l: 0 if l == '*' else 1, x[1] )), reverse=True)
-	result = [(b,a) for (a,b) in result]
-	return result
-
-	#ou 
-
-	def hacker(log):
     hack = {}
     troca = lambda x,y : x if y == '*' else y
     intersecta = lambda x,y : "".join(map(troca, x,y))
@@ -206,9 +170,6 @@ def hacker(log):
     result = [(i[1],i[0]) for i in result]
     result.sort(key=lambda x : sum(map(lambda l : 0 if l == "*" else 1, x[0])), reverse=True)
     return result
-
-
-
 
 
 '''
@@ -243,16 +204,27 @@ def isbn(livros):
 Implemente uma função que determine qual a menor sequência de caracters que
 contém n repetições de uma determinada palavra
 '''
+### erros
 
 def repete(palavra,n):
-    aux = list(palavra)
-    result = list(palavra)
-    for i in range (n-1):
-        if aux[0] == aux[-1]:
-            result.pop()
-        result.extend(aux)
-    result = "".join(result)
-    return result
+	repetidas = 0
+	result = ""
+	pal = list(palavra)
+	for i in range (len(pal)):
+		if pal[i] == pal[-i -1]:
+			repetidas += 1
+		else:
+			break
+	if repetidas == len(pal):
+		repetidas = len(pal)-1
+	pal = pal[repetidas:]
+	if n>=1:
+		result = result.join(palavra)
+		pal = "".join(pal)
+		pal = pal *(n-1)
+		result = result + pal
+	return result
+
 
 
 '''
@@ -295,5 +267,4 @@ def robot(comandos):
                 movs[p] = max(movs[p], aux[p])
         result.append(tuple(movs))
     return result
-
 
