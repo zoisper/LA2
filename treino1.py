@@ -220,8 +220,7 @@ def repete(palavra,n):
 	pal = pal[repetidas:]
 	if n>=1:
 		result = result.join(palavra)
-		pal = "".join(pal)
-		pal = pal *(n-1)
+		pal = "".join(pal)*(n-1)
 		result = result + pal
 	return result
 
