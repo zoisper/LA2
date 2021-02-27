@@ -22,8 +22,7 @@ def aloca(prefs):
                 escolhidos.append(j)
                 del candidatos[i]
                 break
-    result = sorted(candidatos)
-    return result
+    return sorted(candidatos)
 
 
 '''
@@ -57,19 +56,19 @@ nível de criticidade deverão ser listados por ordem alfabética.
 '''
 
 def cruzamentos(ruas):
-	dic = {}
-	for i in ruas:
-	    if i[0] not in dic:
-	        dic[i[0]] = 1
-	    else:
-	        dic[i[0]] += 1
-	    if i[-1] not in dic:
-	        dic[i[-1]] = 1
-	    elif i[0] != i[-1]:
-	        dic[i[-1]] +=1
-	result = sorted(dic.items())
-	result.sort(key=lambda x : x[1])
-	return result
+    result = {}
+    for i in ruas:
+        if i[0] not in result:
+            result[i[0]] = 1
+        else:
+            result[i[0]] += 1
+        if i[-1] not in result:
+            result[i[-1]] = 1
+        elif i[0] != i[-1]:
+            result[i[-1]] +=1
+    result = sorted(result.items())
+    result.sort(key=lambda x : x[1])
+    return result
 
 
 '''
@@ -97,16 +96,16 @@ por ordem alfabética.
 """
 
 def frequencia(texto):
-    pals = {}
-    texto = texto.split()
-    for i in texto:
-        if i not in pals:
-            pals[i] = 1
+    result = {}
+    palavras = texto.split()
+    for i in palavras:
+        if i not in result:
+            result [i] = 1
         else:
-            pals[i] +=1
-    result = sorted(pals.items())
-    result.sort(key=lambda p : p[1], reverse=True)
-    result = [r[0] for r in result]
+            result[i] +=1
+    result = sorted(result.items())
+    result.sort(key=lambda x: x[1], reverse=True)
+    result = [x[0] for x in result]
     return result
 
 
@@ -182,22 +181,22 @@ e deverá devolver a lista ordenada de todos os livros com ISBNs inválidos.
 '''
 
 def valida(isbn):
-	soma = 0
-	for i in range(len(isbn)):
-		if i%2 == 0:
-			soma += eval(isbn[i])
-		else:
-			soma += eval(isbn[i])*3
-	return soma % 10 == 0
+    soma = 0
+    for i in range(len(isbn)):
+        if i%2 == 0:
+            soma += eval(isbn[i])
+        else:
+            soma += eval(isbn[i])*3
+    return soma % 10 == 0
 
 
 def isbn(livros):
-	result = []
-	for i in livros:
-		if not valida(livros[i]):
-			result.append(i)
-	result.sort()
-	return result
+    result = []
+    for i in livros:
+        if not valida(livros[i]):
+            result.append(i)
+    result.sort()
+    return result
 
 
 '''
@@ -207,22 +206,22 @@ contém n repetições de uma determinada palavra
 ### erros
 
 def repete(palavra,n):
-	repetidas = 0
-	result = ""
-	pal = list(palavra)
-	for i in range (len(pal)):
-		if pal[i] == pal[-i -1]:
-			repetidas += 1
-		else:
-			break
-	if repetidas == len(pal):
-		repetidas = len(pal)-1
-	pal = pal[repetidas:]
-	if n>=1:
-		result = result.join(palavra)
-		pal = "".join(pal)*(n-1)
-		result = result + pal
-	return result
+    repetidas = 0
+    result = ""
+    pal = list(palavra)
+    for i in range (len(pal)):
+        if pal[i] == pal[-i -1]:
+            repetidas += 1
+        else:
+            break
+    if repetidas == len(pal):
+        repetidas = len(pal)-1
+    pal = pal[repetidas:]
+    if n>=1:
+        result = result.join(palavra)
+        pal = "".join(pal)*(n-1)
+        result = result + pal
+    return result
 
 
 
