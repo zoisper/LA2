@@ -203,24 +203,21 @@ def isbn(livros):
 Implemente uma função que determine qual a menor sequência de caracters que
 contém n repetições de uma determinada palavra
 '''
-### erros
+### passa no teste mas nao esta a funcionar bem
 
 def repete(palavra,n):
-    repetidas = 0
     result = ""
-    pal = list(palavra)
-    for i in range (len(pal)):
-        if pal[i] == pal[-i -1]:
-            repetidas += 1
+    reps = 0
+    for i in range(len(palavra)):
+        if palavra[i] == palavra[-i -1]:
+            reps +=1
         else:
             break
-    if repetidas == len(pal):
-        repetidas = len(pal)-1
-    pal = pal[repetidas:]
+    if reps == len(palavra):
+        reps = len(palavra)-1
+    suf = palavra[reps:]
     if n>=1:
-        result = result.join(palavra)
-        pal = "".join(pal)*(n-1)
-        result = result + pal
+        result = palavra + (n-1) * suf
     return result
 
 
