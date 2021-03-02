@@ -206,20 +206,15 @@ contém n repetições de uma determinada palavra
 ### passa no teste mas nao esta a funcionar bem
 
 def repete(palavra,n):
-    result = ""
-    reps = 0
-    for i in range(len(palavra)):
-        if palavra[i] == palavra[-i -1]:
-            reps +=1
-        else:
+    repetidos = 0
+    sufixo = list(palavra)
+    for i in range(1, len(palavra)):
+        if palavra[:-i] == palavra[i:]:
+            del sufixo[: len(palavra)-i]
             break
-    if reps == len(palavra):
-        reps = len(palavra)-1
-    suf = palavra[reps:]
-    if n>=1:
-        result = palavra + (n-1) * suf
+    sufixo = "".join(sufixo)
+    result = palavra*(n>0)  + sufixo*(n-1)
     return result
-
 
 
 '''
@@ -262,4 +257,6 @@ def robot(comandos):
                 movs[p] = max(movs[p], aux[p])
         result.append(tuple(movs))
     return result
+
+
 
