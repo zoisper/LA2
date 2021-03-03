@@ -203,7 +203,6 @@ def isbn(livros):
 Implemente uma função que determine qual a menor sequência de caracters que
 contém n repetições de uma determinada palavra
 '''
-### passa no teste mas nao esta a funcionar bem
 
 def repete(palavra,n):
     repetidos = 0
