@@ -123,44 +123,60 @@ def tamanho(ruas):
                 if dists[i][k] + dists[k][j] < dists[i][j]:
                     dists[i][j] = dists[i][k] + dists[k][j]
     result = max ([max(dists[a].items())[1] for a in dists])
-    return dists
+    return result
+
+'''
+O objectivo deste problema é determinar o tamanho do maior continente de um planeta.
+Considera-se que pertencem ao mesmo continente todos os países com ligação entre si por terra. 
+Irá receber uma descrição de um planeta, que consiste numa lista de fronteiras, onde cada fronteira
+é uma lista de países que são vizinhos entre si. 
+A função deverá devolver o tamanho do maior continente.
+
+'''
+
+def maior(vizinhos):
+    orla = vizinhos.copy()
+    result = 0
+    while orla:
+        remover = []
+        v = set(orla.pop(0))
+        for o in orla:
+            s = set(o)
+            if len(v & s) > 0:
+                v = v | s
+                remover.append(o)
+        if len(v) > result:
+            result = len(v)
+        for i in remover:
+            orla.remove(i)
+    return result
 
 
-def fw(adj):
-    dist = {}
-    
-    for o in adj:
-        dist[o] = {}
-        for d in adj:
-            if o == d:
-                dist[o][d] = 0
-            elif d in adj[o]:
-                dist[o][d] = adj[d][o]
-            else:
-                dist[o][d] = float("inf")
-    for k in adj:
-        for o in adj:
-            for d in adj:
-                if dist[o][k] + dist[k][d] < dist[o][d]:
-                    dist[o][d] = dist[o][k] + dist[k][d] 
+'''
+O número de Erdos é uma homenagem ao matemático húngaro Paul Erdos,
+que durante a sua vida escreveu cerca de 1500 artigos, grande parte deles em 
+pareceria com outros autores. O número de Erdos de Paul Erdos é 0. 
+Para qualquer outro autor, o seu número de Erdos é igual ao menor 
+número de Erdos de todos os seus co-autores mais 1. Dado um dicionário que
+associa artigos aos respectivos autores, implemente uma função que
+calcula uma lista com os autores com número de Erdos menores que um determinado 
+valor. A lista de resultado deve ser ordenada pelo número de Erdos, e, para
+autores com o mesmo número, lexicograficamente.
+'''
 
-    return dist
-
-def fixRuas(ruas):
-    adj = {}
-    
-    for rua in ruas:
-        a = rua[0]
-        b = rua[-1]
-        n = len(rua)
-        if a not in adj:
-            adj[a] = {}
-        if b not in adj:
-            adj[b] = {}
-        if b not in adj[a]:
-            adj[a][b] = float("inf")
-        if a not in adj[b]:
-            adj[b][a] = float("inf")
-        adj[a][b] = min(n, adj[a][b])
-        adj[b][a] = min(n, adj[b][a])
-    return adj
+def erdos(artigos,n):
+    numErd = {'Paul Erdos':0}
+    erds = ['Paul Erdos']
+    for e in erds:
+        for a in artigos:
+            if e in artigos[a]:
+                for autor in artigos[a]:
+                    if autor not in numErd:
+                        numErd[autor] = numErd[e] + 1
+                        erds.append(autor)
+                    elif autor != e:
+                        numErd[autor] = min(numErd[autor], numErd[e]+1)
+    result = sorted([(e,numErd[e]) for e in numErd if numErd[e] <=n])
+    result.sort(key=lambda x: x[1])
+    result = [e[0] for e in result]
+    return result
