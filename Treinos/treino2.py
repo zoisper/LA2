@@ -77,3 +77,90 @@ def saltos(o,d):
                 return s+1
             orla.append((x-1,y+2,s+1))
     return 0
+
+
+'''
+Podemos usar um (multi) grafo para representar um mapa de uma cidade: 
+cada nó representa um cruzamento e cada aresta uma rua.
+Pretende-se que implemente uma função que calcula o tamanho de uma cidade, 
+sendo esse tamanho a distância entre os seus cruzamentos mais afastados.
+A entrada consistirá numa lista de nomes de ruas (podendo assumir que os 
+nomes de ruas são únicos). Os identificadores dos cruzamentos correspondem a 
+letras do alfabeto, e cada rua começa (e acaba) no cruzamento 
+identificado pelo primeiro (e último) caracter do respectivo nome.
+
+'''
+def build(ruas):
+    grafo = {}
+    for r in ruas:
+        if r[0] not in grafo:
+            grafo[r[0]] = {}
+            grafo[r[0]][r[0]] = 0
+        if r[-1] not in grafo:
+            grafo[r[-1]] = {}
+            grafo[r[-1]][r[-1]] = 0
+        if r[0] != r[-1]:
+            if r[-1] not in grafo[r[0]]:
+                grafo[r[0]][r[-1]] = len(r)
+                grafo[r[-1]][r[0]] = len(r)
+            else:
+                grafo[r[0]][r[-1]] = min(len(r), grafo[r[0]][r[-1]])
+                grafo[r[-1]][r[0]] = min(len(r), grafo[r[-1]][r[0]])
+
+    
+    for a in grafo:
+        for b in grafo:
+            if b not in grafo[a]:
+                grafo[a][b] = float("inf")
+
+    return grafo
+ 
+def tamanho(ruas):
+    dists = build(ruas)
+    for k in dists:
+        for i in dists:
+            for j in dists:
+                if dists[i][k] + dists[k][j] < dists[i][j]:
+                    dists[i][j] = dists[i][k] + dists[k][j]
+    result = max ([max(dists[a].items())[1] for a in dists])
+    return dists
+
+
+def fw(adj):
+    dist = {}
+    
+    for o in adj:
+        dist[o] = {}
+        for d in adj:
+            if o == d:
+                dist[o][d] = 0
+            elif d in adj[o]:
+                dist[o][d] = adj[d][o]
+            else:
+                dist[o][d] = float("inf")
+    for k in adj:
+        for o in adj:
+            for d in adj:
+                if dist[o][k] + dist[k][d] < dist[o][d]:
+                    dist[o][d] = dist[o][k] + dist[k][d] 
+
+    return dist
+
+def fixRuas(ruas):
+    adj = {}
+    
+    for rua in ruas:
+        a = rua[0]
+        b = rua[-1]
+        n = len(rua)
+        if a not in adj:
+            adj[a] = {}
+        if b not in adj:
+            adj[b] = {}
+        if b not in adj[a]:
+            adj[a][b] = float("inf")
+        if a not in adj[b]:
+            adj[b][a] = float("inf")
+        adj[a][b] = min(n, adj[a][b])
+        adj[b][a] = min(n, adj[b][a])
+    return adj
