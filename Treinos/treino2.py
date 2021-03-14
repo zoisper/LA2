@@ -217,16 +217,16 @@ def caminho(mapa):
             orla.append((x,y+1))
             if (x,y+1) == fim:
                 break
+    
     caminho = []
     p = fim
-    
     while p != (0,0):  # construir caminho por coordenadas de tras para a frente
         caminho.insert(0,p)
         p = parent[p]
     
     ant = (0,0)
     result = ""
-    while caminho:  # construir camninho em string
+    while caminho:  # construir caminho em string
         p = caminho.pop(0)
         if(p[0] > ant[0]):
             result += 'E'
@@ -241,9 +241,43 @@ def caminho(mapa):
     return result
 
 
+'''
+Implemente uma função que calcula o menor custo de atravessar uma região de
+Norte para Sul. O mapa da região é rectangular, dado por uma lista de strings,
+onde cada digito representa a altura de cada ponto. Só é possível efectuar 
+movimentos na horizontal ou na vertical, e só é possível passar de um ponto
+para outro se a diferença de alturas for inferior ou igual a 2, sendo o custo 
+desse movimento 1 mais a diferença de alturas. O ponto de partida (na linha
+mais a Norte) e o ponto de chegada (na linha mais a Sul) não estão fixados à
+partida, devendo a função devolver a coordenada horizontal do melhor
+ponto para iniciar a travessia e o respectivo custo. No caso de haver dois pontos
+com igual custo, deve devolver a coordenada mais a Oeste.
 
+'''
 
+def bfs(origem, mapa):
+    dist = {origem:0}
+    orla = [origem]
+    while orla:
+        x,y = min(orla, key=lambda k: dist[k])
+        orla.remove((x,y))
+        possiveis = [(x-1,y), (x+1,y), (x, y-1), (x, y+1)]
+        for p in possiveis:
+            if p[0] >=0 and p[0] < len(mapa[0]) and p[1] >=0 and p[1] < len(mapa) and abs(int(mapa[p[1]][p[0]]) - int(mapa[y][x])) <=2  and p not in dist:
+                orla.append(p)
+                dist[p] = dist[(x,y)] + abs(int(mapa[p[1]][p[0]]) - int(mapa[y][x])) + 1
+    
+    result = [dist[a] for a in dist if a[1] == len(mapa)-1]
+    if len(result) > 0 :
+        return min(result)
+    else:
+        return float("inf")
 
-
-
-        
+def travessia(mapa):
+    dist = []
+    for i in range(len(mapa[0])):
+        dist.append((i,bfs((i,0),mapa)))
+    dist.sort()
+    dist.sort(key=lambda x: x[1])
+    result = dist.pop(0)
+    return result
