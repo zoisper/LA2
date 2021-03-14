@@ -180,3 +180,70 @@ def erdos(artigos,n):
     result.sort(key=lambda x: x[1])
     result = [e[0] for e in result]
     return result
+
+
+'''
+Implemente uma função que calcula um dos caminhos mais curtos para atravessar
+um labirinto. O mapa do labirinto é quadrado e representado por uma lista 
+de strings, onde um ' ' representa um espaço vazio e um '#' um obstáculo.
+O ponto de entrada é o canto superior esquerdo e o ponto de saída o canto
+inferior direito. A função deve devolver uma string com as instruções para
+atravesar o labirinto. As instruções podem ser 'N','S','E','O'.
+'''
+
+def caminho(mapa):
+    fim = (len(mapa)-1,len(mapa)-1)
+    orla = [(0,0)]
+    parent = {(0,0):(0,0)}
+    while orla:
+        x,y = orla.pop(0)
+        if x-1>= 0 and mapa[y][x-1] == ' ' and (x-1,y) not in parent:
+            parent[(x-1,y)] = (x,y)
+            orla.append((x-1,y))
+            if (x-1,y) == fim:
+                break
+        if x+1 <len(mapa) and mapa[y][x+1] == ' ' and (x+1,y) not in parent :
+            parent[(x+1,y)] = (x,y)
+            orla.append((x+1,y))
+            if (x+1,y) == fim:
+                break
+        if y-1 >= 0 and mapa[y-1][x] == ' ' and (x,y-1) not in parent:
+            parent[(x,y-1)] = (x,y)
+            orla.append((x,y-1))
+            if (x,y-1) == fim:
+                break
+        if y+1 <len(mapa) and mapa[y+1][x] == ' ' and (x,y+1) not in parent:
+            parent[(x,y+1)] = (x,y)
+            orla.append((x,y+1))
+            if (x,y+1) == fim:
+                break
+    caminho = []
+    p = fim
+    
+    while p != (0,0):  # construir caminho por coordenadas de tras para a frente
+        caminho.insert(0,p)
+        p = parent[p]
+    
+    ant = (0,0)
+    result = ""
+    while caminho:  # construir camninho em string
+        p = caminho.pop(0)
+        if(p[0] > ant[0]):
+            result += 'E'
+        elif(p[0] < ant[0]):
+            result += 'O'
+        elif(p[1] > ant[1]):
+            result += 'S'
+        elif(p[1] < ant[1]):
+            result += 'N'
+        ant = p  
+        
+    return result
+
+
+
+
+
+
+
+        
