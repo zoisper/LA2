@@ -10,6 +10,7 @@ O ponto inicial consistirá nas coordenadas horizontal e vertical, medidas a
 partir do canto superior esquerdo.
 O robot só consegue movimentar-se na horizontal ou na vertical. 
 '''
+#10%
 
 def area(p,mapa):
     visitados = set()
@@ -34,8 +35,8 @@ movimentar um cavalo num tabuleiro de xadrez entre duas posições.
 A função recebe dois pares de coordenadas, que identificam a origem e destino pretendido,
 devendo devolver o número mínimo de saltos necessários para atingir o destino a partir da origem.
 Assuma que o tabuleiro tem tamanho ilimitado.
-
 '''
+#10%
 
 def saltos(o,d):
     if o == d:
@@ -88,8 +89,9 @@ A entrada consistirá numa lista de nomes de ruas (podendo assumir que os
 nomes de ruas são únicos). Os identificadores dos cruzamentos correspondem a 
 letras do alfabeto, e cada rua começa (e acaba) no cruzamento 
 identificado pelo primeiro (e último) caracter do respectivo nome.
-
 '''
+#13%
+
 def build(ruas):
     grafo = {}
     for r in ruas:
@@ -131,8 +133,8 @@ Considera-se que pertencem ao mesmo continente todos os países com ligação en
 Irá receber uma descrição de um planeta, que consiste numa lista de fronteiras, onde cada fronteira
 é uma lista de países que são vizinhos entre si. 
 A função deverá devolver o tamanho do maior continente.
-
 '''
+#10%
 
 def maior(vizinhos):
     orla = vizinhos.copy()
@@ -163,7 +165,7 @@ calcula uma lista com os autores com número de Erdos menores que um determinado
 valor. A lista de resultado deve ser ordenada pelo número de Erdos, e, para
 autores com o mesmo número, lexicograficamente.
 '''
-
+#13%
 def erdos(artigos,n):
     numErd = {'Paul Erdos':0}
     erds = ['Paul Erdos']
@@ -190,6 +192,7 @@ O ponto de entrada é o canto superior esquerdo e o ponto de saída o canto
 inferior direito. A função deve devolver uma string com as instruções para
 atravesar o labirinto. As instruções podem ser 'N','S','E','O'.
 '''
+#13%
 
 def caminho(mapa):
     fim = (len(mapa)-1,len(mapa)-1)
@@ -254,6 +257,7 @@ ponto para iniciar a travessia e o respectivo custo. No caso de haver dois ponto
 com igual custo, deve devolver a coordenada mais a Oeste.
 
 '''
+#13%
 
 def bfs(origem, mapa):
     dist = {origem:0}
@@ -281,3 +285,47 @@ def travessia(mapa):
     dist.sort(key=lambda x: x[1])
     result = dist.pop(0)
     return result
+
+
+'''
+Implemente uma função que calcula o preço mais barato para fazer uma viagem de
+autocarro entre duas cidades. A função recebe (para além das duas cidades) uma
+lista de rotas de autocarro, onde cada rota é uma sequência de cidades por onde
+passa o autocarro, intercalada com o custo para viajar entre cada par de cidades.
+Assuma que cada rota funciona nos dois sentidos.
+'''
+#13%
+
+def build(rotas):
+    grafo = {}
+    for rota in rotas:
+        for cidade in range(0, len(rota)-2, 2):
+            if rota[cidade] not in grafo:
+                grafo[rota[cidade]] = {}
+            if rota[cidade+2] not in grafo:
+                grafo[rota[cidade+2]] = {}
+            grafo[rota[cidade]][rota[cidade+2]] = rota[cidade+1]
+            grafo[rota[cidade+2]][rota[cidade]] = rota[cidade+1]
+    return grafo
+
+
+
+def viagem(rotas,o,d):
+    if o == d:
+        return 0
+    grafo = build(rotas)
+    orla = [o]
+    dist = {o:0}
+    while orla:
+        v = min(orla, key=lambda k: dist[k])
+        orla.remove(v)
+        for destino in grafo[v]:
+            if destino not in dist:
+                dist[destino] = dist[v] + grafo[v][destino]
+                orla.append(destino)
+            elif dist[destino] > dist[v] + grafo[v][destino]:
+                dist[destino] = dist[v] + grafo[v][destino]
+    if d in dist:
+        return dist[d]
+    else:
+        return float("inf")
