@@ -10,7 +10,7 @@ O ponto inicial consistirá nas coordenadas horizontal e vertical, medidas a
 partir do canto superior esquerdo.
 O robot só consegue movimentar-se na horizontal ou na vertical. 
 '''
-#10%
+#13%
 
 def area(p,mapa):
     visitados = set()
@@ -18,13 +18,13 @@ def area(p,mapa):
     while orla:
         x,y = orla.pop(0)
         visitados.add((x,y))
-        if x-1>=0 and (x-1,y) not in visitados and mapa[x-1][y] == '.':
+        if x-1>=0 and (x-1,y) not in visitados and mapa[y][x-1] == '.':
             orla.append((x-1,y))
-        if x+1<len(mapa) and (x+1,y) not in visitados and mapa[x+1][y] == '.':
+        if x+1<len(mapa) and (x+1,y) not in visitados and mapa[y][x+1] == '.':
             orla.append((x+1,y))
-        if y-1>=0 and (x,y-1) not in visitados and mapa[x][y-1] == '.':
+        if y-1>=0 and (x,y-1) not in visitados and mapa[y-1][x] == '.':
             orla.append((x,y-1))
-        if y+1<len(mapa) and (x,y+1) not in visitados and mapa[x][y+1] == '.':
+        if y+1<len(mapa) and (x,y+1) not in visitados and mapa[y+1][x] == '.':
             orla.append((x,y+1))
     return len(visitados)
 
@@ -166,6 +166,7 @@ valor. A lista de resultado deve ser ordenada pelo número de Erdos, e, para
 autores com o mesmo número, lexicograficamente.
 '''
 #13%
+
 def erdos(artigos,n):
     numErd = {'Paul Erdos':0}
     erds = ['Paul Erdos']
@@ -329,3 +330,5 @@ def viagem(rotas,o,d):
         return dist[d]
     else:
         return float("inf")
+
+
