@@ -256,6 +256,3 @@ def robot(comandos):
                 movs[p] = max(movs[p], aux[p])
         result.append(tuple(movs))
     return result
-
-
-

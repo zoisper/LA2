@@ -10,7 +10,6 @@ O ponto inicial consistirá nas coordenadas horizontal e vertical, medidas a
 partir do canto superior esquerdo.
 O robot só consegue movimentar-se na horizontal ou na vertical. 
 '''
-#13%
 
 def area(p,mapa):
     visitados = set()
@@ -36,7 +35,6 @@ A função recebe dois pares de coordenadas, que identificam a origem e destino 
 devendo devolver o número mínimo de saltos necessários para atingir o destino a partir da origem.
 Assuma que o tabuleiro tem tamanho ilimitado.
 '''
-#13%
 
 def saltos(o,d):
     if o == d:
@@ -70,7 +68,6 @@ nomes de ruas são únicos). Os identificadores dos cruzamentos correspondem a
 letras do alfabeto, e cada rua começa (e acaba) no cruzamento 
 identificado pelo primeiro (e último) caracter do respectivo nome.
 '''
-#13%
 
 def build(ruas):
     grafo = {}
@@ -114,7 +111,6 @@ Irá receber uma descrição de um planeta, que consiste numa lista de fronteira
 é uma lista de países que são vizinhos entre si. 
 A função deverá devolver o tamanho do maior continente.
 '''
-#10%
 
 def absorve(liquido ,esponja):
     for gota in liquido:
@@ -160,7 +156,6 @@ calcula uma lista com os autores com número de Erdos menores que um determinado
 valor. A lista de resultado deve ser ordenada pelo número de Erdos, e, para
 autores com o mesmo número, lexicograficamente.
 '''
-#13%
 
 def erdos(artigos,n):
     numErd = {'Paul Erdos':0}
@@ -188,7 +183,6 @@ O ponto de entrada é o canto superior esquerdo e o ponto de saída o canto
 inferior direito. A função deve devolver uma string com as instruções para
 atravesar o labirinto. As instruções podem ser 'N','S','E','O'.
 '''
-#13%
 
 def caminho(mapa):
     fim = (len(mapa)-1,len(mapa)-1)
@@ -253,7 +247,6 @@ ponto para iniciar a travessia e o respectivo custo. No caso de haver dois ponto
 com igual custo, deve devolver a coordenada mais a Oeste.
 
 '''
-#13%
 
 def bfs(origem, mapa):
     dist = {origem:0}
@@ -290,7 +283,6 @@ lista de rotas de autocarro, onde cada rota é uma sequência de cidades por ond
 passa o autocarro, intercalada com o custo para viajar entre cada par de cidades.
 Assuma que cada rota funciona nos dois sentidos.
 '''
-#13%
 
 def build(rotas):
     grafo = {}
