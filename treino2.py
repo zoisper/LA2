@@ -36,48 +36,28 @@ A função recebe dois pares de coordenadas, que identificam a origem e destino 
 devendo devolver o número mínimo de saltos necessários para atingir o destino a partir da origem.
 Assuma que o tabuleiro tem tamanho ilimitado.
 '''
-#10%
+#13%
 
 def saltos(o,d):
     if o == d:
         return 0
-    orla = [(o[0],o[1],0)]
-    visitados = set()
-    while orla:
-        x,y,s = orla.pop(0)
-        visitados.add((x,y))
-        if (x-2,y-1) not in visitados:
-            if (x-2,y-1)  == d:
-                return s+1
-            orla.append((x-2,y-1,s+1))
-        if (x+2,y-1) not in visitados:
-            if (x+2,y-1)  == d:
-                return s+1
-            orla.append((x+2,y-1,s+1))
-        if (x-2,y+1) not in visitados:
-            if (x-2,y+1)  == d:
-                return s+1
-            orla.append((x-2,y+1,s+1))
-        if (x+2,y+1) not in visitados:
-            if (x+2,y+1)  == d:
-                return s+1
-        if (x+1,y-2) not in visitados:
-            if (x+1,y-2)  == d:
-                return s+1
-            orla.append((x+1,y-2,s+1))
-        if (x-1,y-2) not in visitados:
-            if (x-1,y-2)  == d:
-                return s+1
-            orla.append((x-1,y-2,s+1))
-        if (x+1,y+2) not in visitados:
-            if (x+1,y+2)  == d:
-                return s+1
-            orla.append((x+1,y+2,s+1))
-        if (x-1,y+2) not in visitados:
-            if (x-1,y+2)  == d:
-                return s+1
-            orla.append((x-1,y+2,s+1))
-    return 0
+    deslocamentos = [(-1,-2), (-1,2), (1,-2), (1,2), (-2,-1), (-2,1), (2,-1),(2,1)]
+    orla = [o]
+    dist = {o:0}
+    result = -1
+    while result == -1:
+        k = orla.pop(0)
+        numSaltos = dist[k]
+        for delta in deslocamentos:
+            candidato = (delta[0]+k[0],delta[1]+k[1])
+            if candidato == d:
+                result = numSaltos + 1
+                break
+            elif candidato not in dist:
+                dist[candidato] = numSaltos +1
+                orla.append(candidato)
+        
+    return result
 
 
 '''
@@ -141,16 +121,15 @@ def maior(vizinhos):
     result = 0
     while orla:
         remover = []
-        v = set(orla.pop(0))
+        continente = set(orla.pop(0))
         for o in orla:
-            s = set(o)
-            if len(v & s) > 0:
-                v = v | s
+            paises = set(o)
+            if len(continente & paises) > 0:
+                continente = continente | paises
                 remover.append(o)
-        if len(v) > result:
-            result = len(v)
-        for i in remover:
-            orla.remove(i)
+        if len(continente) > result:
+            result = len(continente)
+        orla = [x for x in orla if x not in remover]
     return result
 
 
@@ -330,5 +309,4 @@ def viagem(rotas,o,d):
         return dist[d]
     else:
         return float("inf")
-
 
