@@ -116,20 +116,36 @@ A função deverá devolver o tamanho do maior continente.
 '''
 #10%
 
+def absorve(liquido ,esponja):
+    for gota in liquido:
+        if len(gota & esponja)>0:
+            esponja = esponja | gota
+    return esponja
+
+def insere(continentes, fronteira):
+    encontrado = 0
+    for paises in continentes:
+    	if len(paises & fronteira)>0:
+    		fronteira = fronteira | paises
+    		continentes.remove(paises)
+    		continentes.append(fronteira)
+    		encontrado = 1
+    		break
+    if encontrado == 0:
+    	continentes.append(fronteira)
+    return continentes
+
+
 def maior(vizinhos):
-    orla = vizinhos.copy()
     result = 0
-    while orla:
-        remover = []
-        continente = set(orla.pop(0))
-        for o in orla:
-            paises = set(o)
-            if len(continente & paises) > 0:
-                continente = continente | paises
-                remover.append(o)
-        if len(continente) > result:
-            result = len(continente)
-        orla = [x for x in orla if x not in remover]
+    fronteiras = [set(v) for v in vizinhos]
+    continentes = []
+    for fronteira in fronteiras:
+    	fronteira = absorve(fronteiras,fronteira)
+    	continentes = insere(continentes, fronteira)
+
+    if continentes:
+    	result = len(max(continentes, key=lambda x: len(x)))
     return result
 
 
@@ -309,4 +325,3 @@ def viagem(rotas,o,d):
         return dist[d]
     else:
         return float("inf")
-
