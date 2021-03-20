@@ -179,20 +179,19 @@ autores com o mesmo número, lexicograficamente.
 '''
 
 def erdos(artigos,n):
-    numErd = {'Paul Erdos':0}
-    erds = ['Paul Erdos']
-    for e in erds:
+    orla = ["Paul Erdos"]
+    numErdos = {"Paul Erdos":0}
+    while orla:
+        o = orla.pop(0)
         for a in artigos:
-            if e in artigos[a]:
+            if o in artigos[a]:
                 for autor in artigos[a]:
-                    if autor not in numErd:
-                        numErd[autor] = numErd[e] + 1
-                        erds.append(autor)
-                    elif autor != e:
-                        numErd[autor] = min(numErd[autor], numErd[e]+1)
-    result = sorted([(e,numErd[e]) for e in numErd if numErd[e] <=n])
+                    if autor not in numErdos:
+                        numErdos[autor] = numErdos[o] +1
+                        orla.append(autor)
+    result = sorted(a for a in numErdos.items() if a[1]<=n)
     result.sort(key=lambda x: x[1])
-    result = [e[0] for e in result]
+    result = [a[0] for a in result]
     return result
 
 
