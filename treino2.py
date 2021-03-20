@@ -1,6 +1,5 @@
 #https://codeboard.io/projects/153023
 
-
 '''
 Implemente uma função que calcula a área de um mapa que é acessível por
 um robot a partir de um determinado ponto.
@@ -25,6 +24,25 @@ def area(p,mapa):
             orla.append((x,y-1))
         if y+1<len(mapa) and (x,y+1) not in visitados and mapa[y+1][x] == '.':
             orla.append((x,y+1))
+    return len(visitados)
+
+
+    #ou
+
+    def area(p,mapa):
+    deslocamentos = [(-1,0), (1,0), (0,-1),(0,1)]
+    visitados = {p}
+    orla = [p]
+
+    while orla:
+    	x,y = orla.pop(0)
+    	for dx,dy in deslocamentos:
+    		candidato = (x+dx,y+dy)
+    		if candidato[0] >=0 and candidato[0]<len(mapa) and candidato[1] >=0 and candidato[1]<len(mapa) and mapa[candidato[1]][candidato[0]] == '.' and candidato not in visitados:
+    			orla.append(candidato)
+    			visitados.add(candidato) 
+
+
     return len(visitados)
 
 
@@ -86,12 +104,6 @@ def build(ruas):
                 grafo[r[0]][r[-1]] = min(len(r), grafo[r[0]][r[-1]])
                 grafo[r[-1]][r[0]] = min(len(r), grafo[r[-1]][r[0]])
 
-    
-    for a in grafo:
-        for b in grafo:
-            if b not in grafo[a]:
-                grafo[a][b] = float("inf")
-
     return grafo
  
 def tamanho(ruas):
@@ -99,10 +111,19 @@ def tamanho(ruas):
     for k in dists:
         for i in dists:
             for j in dists:
-                if dists[i][k] + dists[k][j] < dists[i][j]:
+                if k not in dists[i] or j not in dists[k]:
+                	dists[i][j] = float("inf")
+                	dists[j][i] = float("inf")
+                elif j not in dists[i]:
+                	dists[i][j] = dists[i][k] + dists[k][j]
+                	dists[j][i] = dists[i][k] + dists[k][j]
+                elif dists[i][k] + dists[k][j] < dists[i][j]:
                     dists[i][j] = dists[i][k] + dists[k][j]
-    result = max ([max(dists[a].items())[1] for a in dists])
+                    dists[j][i] = dists[i][k] + dists[k][j]
+    result = max ([max(dists[a].items(), key=lambda k: k[1])[1] for a in dists])
     return result
+
+
 
 '''
 O objectivo deste problema é determinar o tamanho do maior continente de um planeta.
