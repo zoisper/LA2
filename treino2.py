@@ -133,23 +133,23 @@ Irá receber uma descrição de um planeta, que consiste numa lista de fronteira
 A função deverá devolver o tamanho do maior continente.
 '''
 
-def absorve(liquido ,esponja):
-    for gota in liquido:
-        if len(gota & esponja)>0:
-            esponja = esponja | gota
-    return esponja
+def absorve(fronteiras,paises):
+    for fronteira in fronteiras:
+        if len(fronteira & paises)>0:
+            paises = paises | fronteira
+    return paises
 
 def insere(continentes, fronteira):
     encontrado = 0
-    for paises in continentes:
-        if len(paises & fronteira)>0:
-            fronteira = fronteira | paises
-            continentes.remove(paises)
+    for continente in continentes:
+        if len(fronteira & continente)>0:
+            fronteira = fronteira | continente
+            continentes.remove(continente)
             continentes.append(fronteira)
             encontrado = 1
             break
     if encontrado == 0:
-        continentes.append(fronteira)
+            continentes.append(fronteira)
     return continentes
 
 
@@ -157,10 +157,9 @@ def maior(vizinhos):
     result = 0
     fronteiras = [set(v) for v in vizinhos]
     continentes = []
-    for fronteira in fronteiras:
-        fronteira = absorve(fronteiras,fronteira)
-        continentes = insere(continentes, fronteira)
-
+    for paises in fronteiras:
+        paises = absorve(fronteiras,paises)
+        continentes = insere(continentes,paises)
     if continentes:
         result = len(max(continentes, key=lambda x: len(x)))
     return result
@@ -246,32 +245,39 @@ com igual custo, deve devolver a coordenada mais a Oeste.
 
 '''
 
-def bfs(origem, mapa):
-    dist = {origem:0}
+def bfs(mapa, origem):
+    largura = len(mapa[0])
+    cumprimento = len(mapa)
+    if origem[1] == cumprimento-1:
+        return 0
     orla = [origem]
+    dists = {origem:0}
+    deslocamentos = [(-1,0),(1,0),(0,-1),(0,1)]
     while orla:
-        x,y = min(orla, key=lambda k: dist[k])
+        x,y = min(orla,key=lambda k: dists[k])
         orla.remove((x,y))
-        possiveis = [(x-1,y), (x+1,y), (x, y-1), (x, y+1)]
-        for p in possiveis:
-            if p[0] >=0 and p[0] < len(mapa[0]) and p[1] >=0 and p[1] < len(mapa) and abs(int(mapa[p[1]][p[0]]) - int(mapa[y][x])) <=2  and p not in dist:
-                orla.append(p)
-                dist[p] = dist[(x,y)] + abs(int(mapa[p[1]][p[0]]) - int(mapa[y][x])) + 1
-    
-    result = [dist[a] for a in dist if a[1] == len(mapa)-1]
-    if len(result) > 0 :
+        for dx,dy in deslocamentos:
+            candidato = (x+dx,y+dy)
+            if candidato[0]>=0 and candidato[0]<largura and candidato[1]>=0 and candidato[1]<cumprimento:
+                peso = abs(int(mapa[candidato[1]][candidato[0]]) - int(mapa[y][x]))
+                if peso <=2 and candidato not in dists:
+                    orla.append(candidato)
+                    dists[candidato] = dists[(x,y)] + peso +1
+                elif peso <=2 and dists[candidato] >=  dists[(x,y)] + peso +1 :
+                    dists[candidato] = dists[(x,y)] + peso +1
+    result = [dists[a] for a in dists if a[1] == cumprimento-1]
+    if result:
         return min(result)
-    else:
-        return float("inf")
+    return float("inf")
+
 
 def travessia(mapa):
-    dist = []
-    for i in range(len(mapa[0])):
-        dist.append((i,bfs((i,0),mapa)))
-    dist.sort()
-    dist.sort(key=lambda x: x[1])
-    result = dist.pop(0)
-    return result
+    result = []
+    for origem in range(len(mapa[0])):
+        result.append((origem,bfs(mapa,(origem,0))))
+    result.sort()
+    result.sort(key=lambda x: x[1])
+    return result[0]
 
 
 '''
@@ -285,73 +291,34 @@ Assuma que cada rota funciona nos dois sentidos.
 def build(rotas):
     grafo = {}
     for rota in rotas:
-        for cidade in range(0, len(rota)-2, 2):
-            if rota[cidade] not in grafo:
-                grafo[rota[cidade]] = {}
-            if rota[cidade+2] not in grafo:
-                grafo[rota[cidade+2]] = {}
-            grafo[rota[cidade]][rota[cidade+2]] = rota[cidade+1]
-            grafo[rota[cidade+2]][rota[cidade]] = rota[cidade+1]
+        for cidade in range(0,len(rota)-2,2):
+            partida = rota[cidade]
+            destino = rota[cidade+2]
+            distancia = rota[cidade+1]
+            if partida not in grafo:
+                grafo[partida] = {}
+            if destino not in grafo:
+                grafo[destino] = {}
+            grafo[partida][destino] = distancia 
+            grafo[destino][partida] = distancia
     return grafo
 
 
-
 def viagem(rotas,o,d):
-    if o == d:
-        return 0
     grafo = build(rotas)
+    result = float("inf")
     orla = [o]
-    dist = {o:0}
+    dists = {o:0}
     while orla:
-        v = min(orla, key=lambda k: dist[k])
-        orla.remove(v)
-        for destino in grafo[v]:
-            if destino not in dist:
-                dist[destino] = dist[v] + grafo[v][destino]
+        partida = min(orla, key=lambda x: dists[x])
+        orla.remove(partida)
+        if partida == d:
+            result = dists[partida]
+            break
+        for destino in grafo[partida]:
+            if destino not in dists:
+                dists[destino] = dists[partida] + grafo[partida][destino]
                 orla.append(destino)
-            elif dist[destino] > dist[v] + grafo[v][destino]:
-                dist[destino] = dist[v] + grafo[v][destino]
-    if d in dist:
-        return dist[d]
-    else:
-        return float("inf")
-
-
-'''
-
-Implemente uma função que calcula um dos caminhos mais curtos para atravessar
-um labirinto. O mapa do labirinto é quadrado e representado por uma lista 
-de strings, onde um ' ' representa um espaço vazio e um '#' um obstáculo.
-O ponto de entrada é o canto superior esquerdo e o ponto de saída o canto
-inferior direito. A função deve devolver uma string com as instruções para
-atravesar o labirinto. As instruções podem ser 'N','S','E','O'.
-
-'''
-
-def caminho(mapa):
-    fim = (len(mapa)-1,len(mapa)-1)
-    if fim == (0,0):
-        return ""
-    deslocamentos = [(-1,0),(0,-1),(1,0),(0,1)]
-    orla = [(0,0)]
-    caminho = {(0,0):""}
-    result = -1
-    while orla:
-        x,y = orla.pop(0)
-        for dx, dy in deslocamentos:
-            candidato = (x+dx,y+dy)
-            if candidato[0] >=0 and candidato[0] < len(mapa) and candidato[1] >=0 and candidato[1] < len(mapa) and mapa[candidato[1]][candidato[0]] == ' ' and candidato not in caminho:
-                orla.append(candidato)
-                if dx == -1:
-                    caminho[candidato] = caminho[(x,y)] + 'O'
-                elif dx == 1:
-                    caminho[candidato] = caminho[(x,y)] + 'E'
-                elif dy == -1:
-                    caminho[candidato] = caminho[(x,y)] + 'N'
-                elif dy == 1:
-                    caminho[candidato] = caminho[(x,y)] + 'S'
-                if candidato == fim:
-                    result = caminho[candidato]
-                    break
-
+            elif dists[destino] > dists[partida] + grafo[partida][destino]:
+                dists[destino] = dists[partida] + grafo[partida][destino]
     return result
