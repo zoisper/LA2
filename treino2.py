@@ -35,12 +35,12 @@ def area(p,mapa):
     orla = [p]
 
     while orla:
-    	x,y = orla.pop(0)
-    	for dx,dy in deslocamentos:
-    		candidato = (x+dx,y+dy)
-    		if candidato[0] >=0 and candidato[0]<len(mapa) and candidato[1] >=0 and candidato[1]<len(mapa) and mapa[candidato[1]][candidato[0]] == '.' and candidato not in visitados:
-    			orla.append(candidato)
-    			visitados.add(candidato) 
+        x,y = orla.pop(0)
+        for dx,dy in deslocamentos:
+            candidato = (x+dx,y+dy)
+            if candidato[0] >=0 and candidato[0]<len(mapa) and candidato[1] >=0 and candidato[1]<len(mapa) and mapa[candidato[1]][candidato[0]] == '.' and candidato not in visitados:
+                orla.append(candidato)
+                visitados.add(candidato) 
 
 
     return len(visitados)
@@ -112,11 +112,11 @@ def tamanho(ruas):
         for i in dists:
             for j in dists:
                 if k not in dists[i] or j not in dists[k]:
-                	dists[i][j] = float("inf")
-                	dists[j][i] = float("inf")
+                    dists[i][j] = float("inf")
+                    dists[j][i] = float("inf")
                 elif j not in dists[i]:
-                	dists[i][j] = dists[i][k] + dists[k][j]
-                	dists[j][i] = dists[i][k] + dists[k][j]
+                    dists[i][j] = dists[i][k] + dists[k][j]
+                    dists[j][i] = dists[i][k] + dists[k][j]
                 elif dists[i][k] + dists[k][j] < dists[i][j]:
                     dists[i][j] = dists[i][k] + dists[k][j]
                     dists[j][i] = dists[i][k] + dists[k][j]
@@ -142,14 +142,14 @@ def absorve(liquido ,esponja):
 def insere(continentes, fronteira):
     encontrado = 0
     for paises in continentes:
-    	if len(paises & fronteira)>0:
-    		fronteira = fronteira | paises
-    		continentes.remove(paises)
-    		continentes.append(fronteira)
-    		encontrado = 1
-    		break
+        if len(paises & fronteira)>0:
+            fronteira = fronteira | paises
+            continentes.remove(paises)
+            continentes.append(fronteira)
+            encontrado = 1
+            break
     if encontrado == 0:
-    	continentes.append(fronteira)
+        continentes.append(fronteira)
     return continentes
 
 
@@ -158,11 +158,11 @@ def maior(vizinhos):
     fronteiras = [set(v) for v in vizinhos]
     continentes = []
     for fronteira in fronteiras:
-    	fronteira = absorve(fronteiras,fronteira)
-    	continentes = insere(continentes, fronteira)
+        fronteira = absorve(fronteiras,fronteira)
+        continentes = insere(continentes, fronteira)
 
     if continentes:
-    	result = len(max(continentes, key=lambda x: len(x)))
+        result = len(max(continentes, key=lambda x: len(x)))
     return result
 
 
@@ -206,51 +206,29 @@ atravesar o labirinto. As instruções podem ser 'N','S','E','O'.
 
 def caminho(mapa):
     fim = (len(mapa)-1,len(mapa)-1)
+    if fim == (0,0):
+        return ""
+    deslocamentos = [(-1,0),(0,-1),(1,0),(0,1)]
     orla = [(0,0)]
-    parent = {(0,0):(0,0)}
+    caminho = {(0,0):""}
+    result = -1
     while orla:
         x,y = orla.pop(0)
-        if x-1>= 0 and mapa[y][x-1] == ' ' and (x-1,y) not in parent:
-            parent[(x-1,y)] = (x,y)
-            orla.append((x-1,y))
-            if (x-1,y) == fim:
-                break
-        if x+1 <len(mapa) and mapa[y][x+1] == ' ' and (x+1,y) not in parent :
-            parent[(x+1,y)] = (x,y)
-            orla.append((x+1,y))
-            if (x+1,y) == fim:
-                break
-        if y-1 >= 0 and mapa[y-1][x] == ' ' and (x,y-1) not in parent:
-            parent[(x,y-1)] = (x,y)
-            orla.append((x,y-1))
-            if (x,y-1) == fim:
-                break
-        if y+1 <len(mapa) and mapa[y+1][x] == ' ' and (x,y+1) not in parent:
-            parent[(x,y+1)] = (x,y)
-            orla.append((x,y+1))
-            if (x,y+1) == fim:
-                break
-    
-    caminho = []
-    p = fim
-    while p != (0,0):  # construir caminho por coordenadas de tras para a frente
-        caminho.insert(0,p)
-        p = parent[p]
-    
-    ant = (0,0)
-    result = ""
-    while caminho:  # construir caminho em string
-        p = caminho.pop(0)
-        if(p[0] > ant[0]):
-            result += 'E'
-        elif(p[0] < ant[0]):
-            result += 'O'
-        elif(p[1] > ant[1]):
-            result += 'S'
-        elif(p[1] < ant[1]):
-            result += 'N'
-        ant = p  
-        
+        for dx, dy in deslocamentos:
+            candidato = (x+dx,y+dy)
+            if candidato[0] >=0 and candidato[0] < len(mapa) and candidato[1] >=0 and candidato[1] < len(mapa) and mapa[candidato[1]][candidato[0]] == ' ' and candidato not in caminho:
+                orla.append(candidato)
+                if dx == -1:
+                    caminho[candidato] = caminho[(x,y)] + 'O'
+                elif dx == 1:
+                    caminho[candidato] = caminho[(x,y)] + 'E'
+                elif dy == -1:
+                    caminho[candidato] = caminho[(x,y)] + 'N'
+                elif dy == 1:
+                    caminho[candidato] = caminho[(x,y)] + 'S'
+                if candidato == fim:
+                    result = caminho[candidato]
+                    break
     return result
 
 
@@ -337,3 +315,43 @@ def viagem(rotas,o,d):
         return dist[d]
     else:
         return float("inf")
+
+
+'''
+
+Implemente uma função que calcula um dos caminhos mais curtos para atravessar
+um labirinto. O mapa do labirinto é quadrado e representado por uma lista 
+de strings, onde um ' ' representa um espaço vazio e um '#' um obstáculo.
+O ponto de entrada é o canto superior esquerdo e o ponto de saída o canto
+inferior direito. A função deve devolver uma string com as instruções para
+atravesar o labirinto. As instruções podem ser 'N','S','E','O'.
+
+'''
+
+def caminho(mapa):
+    fim = (len(mapa)-1,len(mapa)-1)
+    if fim == (0,0):
+        return ""
+    deslocamentos = [(-1,0),(0,-1),(1,0),(0,1)]
+    orla = [(0,0)]
+    caminho = {(0,0):""}
+    result = -1
+    while orla:
+        x,y = orla.pop(0)
+        for dx, dy in deslocamentos:
+            candidato = (x+dx,y+dy)
+            if candidato[0] >=0 and candidato[0] < len(mapa) and candidato[1] >=0 and candidato[1] < len(mapa) and mapa[candidato[1]][candidato[0]] == ' ' and candidato not in caminho:
+                orla.append(candidato)
+                if dx == -1:
+                    caminho[candidato] = caminho[(x,y)] + 'O'
+                elif dx == 1:
+                    caminho[candidato] = caminho[(x,y)] + 'E'
+                elif dy == -1:
+                    caminho[candidato] = caminho[(x,y)] + 'N'
+                elif dy == 1:
+                    caminho[candidato] = caminho[(x,y)] + 'S'
+                if candidato == fim:
+                    result = caminho[candidato]
+                    break
+
+    return result
