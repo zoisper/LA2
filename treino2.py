@@ -31,16 +31,16 @@ def area(p,mapa):
 
     def area(p,mapa):
     deslocamentos = [(-1,0), (1,0), (0,-1),(0,1)]
-    visitados = {p}
+    visitados = set()
     orla = [p]
 
     while orla:
         x,y = orla.pop(0)
+        visitados.add((x,y))
         for dx,dy in deslocamentos:
             candidato = (x+dx,y+dy)
             if candidato[0] >=0 and candidato[0]<len(mapa) and candidato[1] >=0 and candidato[1]<len(mapa) and mapa[candidato[1]][candidato[0]] == '.' and candidato not in visitados:
                 orla.append(candidato)
-                visitados.add(candidato) 
 
 
     return len(visitados)
@@ -57,22 +57,21 @@ Assuma que o tabuleiro tem tamanho ilimitado.
 def saltos(o,d):
     if o == d:
         return 0
-    deslocamentos = [(-1,-2), (-1,2), (1,-2), (1,2), (-2,-1), (-2,1), (2,-1),(2,1)]
-    orla = [o]
-    dist = {o:0}
     result = -1
+    deslocamentos = [(-1,-2),(-1,2),(1,-2),(1,2),(-2,-1),(-2,1),(2,-1),(2,1)]
+    orla = [o]
+    dists ={o:0}
     while result == -1:
-        k = orla.pop(0)
-        numSaltos = dist[k]
-        for delta in deslocamentos:
-            candidato = (delta[0]+k[0],delta[1]+k[1])
+        x,y = orla.pop(0)
+        for dx,dy in deslocamentos:
+            candidato = (x+dx,y+dy)
             if candidato == d:
-                result = numSaltos + 1
+                result = dists[(x,y)] + 1
                 break
-            elif candidato not in dist:
-                dist[candidato] = numSaltos +1
+            elif candidato not in dists:
+                dists[candidato] = dists[(x,y)] + 1
                 orla.append(candidato)
-        
+    
     return result
 
 
@@ -88,41 +87,39 @@ identificado pelo primeiro (e último) caracter do respectivo nome.
 '''
 
 def build(ruas):
-    grafo = {}
-    for r in ruas:
-        if r[0] not in grafo:
-            grafo[r[0]] = {}
-            grafo[r[0]][r[0]] = 0
-        if r[-1] not in grafo:
-            grafo[r[-1]] = {}
-            grafo[r[-1]][r[-1]] = 0
-        if r[0] != r[-1]:
-            if r[-1] not in grafo[r[0]]:
-                grafo[r[0]][r[-1]] = len(r)
-                grafo[r[-1]][r[0]] = len(r)
-            else:
-                grafo[r[0]][r[-1]] = min(len(r), grafo[r[0]][r[-1]])
-                grafo[r[-1]][r[0]] = min(len(r), grafo[r[-1]][r[0]])
+	grafo = {}
+	for rua in ruas:
+		partida = rua[0]
+		destino = rua[-1]
+		if partida not in grafo:
+			grafo[partida] = {}
+			grafo[partida][partida] = 0
+		if destino not in grafo:
+			grafo[destino] = {}
+			grafo[destino][destino] = 0
+		if partida != destino:
+			if destino not in grafo[partida]:
+				grafo[partida][destino] = len(rua)
+				grafo[destino][partida] = len(rua)
+			else:
+				grafo[partida][destino] = min(grafo[partida][destino], len(rua))
+				grafo[destino][partida] = min(grafo[partida][destino], len(rua))
 
-    return grafo
+	return grafo
  
 def tamanho(ruas):
-    dists = build(ruas)
-    for k in dists:
-        for i in dists:
-            for j in dists:
-                if k not in dists[i] or j not in dists[k]:
-                    dists[i][j] = float("inf")
-                    dists[j][i] = float("inf")
-                elif j not in dists[i]:
-                    dists[i][j] = dists[i][k] + dists[k][j]
-                    dists[j][i] = dists[i][k] + dists[k][j]
-                elif dists[i][k] + dists[k][j] < dists[i][j]:
-                    dists[i][j] = dists[i][k] + dists[k][j]
-                    dists[j][i] = dists[i][k] + dists[k][j]
-    result = max ([max(dists[a].items(), key=lambda k: k[1])[1] for a in dists])
+    grafo = build(ruas)
+    for k in grafo:
+    	for i in grafo:
+    		for j in grafo[i]:
+    			if k not in grafo[i] or j not in grafo[k]:
+    				grafo[i][j] = float("inf")
+    			elif j not in grafo[i]:
+    				grafo[i][j] = grafo[i][k] + grafo[k][j]
+    			else:
+    				grafo[i][j] = min (grafo[i][j], grafo[i][k] + grafo[k][j])
+    result = max([max(grafo[a].items(), key=lambda x: x[1])[1]  for a in grafo])
     return result
-
 
 
 '''
@@ -161,7 +158,7 @@ def maior(vizinhos):
         paises = absorve(fronteiras,paises)
         continentes = insere(continentes,paises)
     if continentes:
-        result = len(max(continentes, key=lambda x: len(x)))
+        result = len(max(continentes, key=len))
     return result
 
 
@@ -322,3 +319,4 @@ def viagem(rotas,o,d):
             elif dists[destino] > dists[partida] + grafo[partida][destino]:
                 dists[destino] = dists[partida] + grafo[partida][destino]
     return result
+
