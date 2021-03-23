@@ -249,32 +249,34 @@ def bfs(mapa, origem):
         return 0
     orla = [origem]
     dists = {origem:0}
-    deslocamentos = [(-1,0),(1,0),(0,-1),(0,1)]
+    deslocamentos = [(1,0),(-1,0),(0,1),(0,-1)]
+    result = float("inf")
     while orla:
-        x,y = min(orla,key=lambda k: dists[k])
+        x,y = min(orla, key=lambda k: dists[k])
         orla.remove((x,y))
+        if y == cumprimento-1:
+            return dists[(x,y)]
         for dx,dy in deslocamentos:
             candidato = (x+dx,y+dy)
-            if candidato[0]>=0 and candidato[0]<largura and candidato[1]>=0 and candidato[1]<cumprimento:
-                peso = abs(int(mapa[candidato[1]][candidato[0]]) - int(mapa[y][x]))
+            if candidato[0]>=0 and candidato[0]< largura and candidato[1]>=0 and candidato[1]< cumprimento:
+                peso = abs(int (mapa[candidato[1]][candidato[0]]) - int(mapa[y][x]))
                 if peso <=2 and candidato not in dists:
+                    dists[candidato] = dists[(x,y)] + peso +1
                     orla.append(candidato)
-                    dists[candidato] = dists[(x,y)] + peso +1
-                elif peso <=2 and dists[candidato] >=  dists[(x,y)] + peso +1 :
-                    dists[candidato] = dists[(x,y)] + peso +1
-    result = [dists[a] for a in dists if a[1] == cumprimento-1]
-    if result:
-        return min(result)
-    return float("inf")
-
+                elif peso <=2:
+                    dists[candidato] = min(dists[candidato],dists[(x,y)] + peso +1 )
+    return result
+            
+        
 
 def travessia(mapa):
-    result = []
-    for origem in range(len(mapa[0])):
-        result.append((origem,bfs(mapa,(origem,0))))
-    result.sort()
+    result =[]
+    for i in range (len(mapa[0])):
+        result.append((i,bfs(mapa,(i,0))))
+    result.sort(key=lambda x: x[0])
     result.sort(key=lambda x: x[1])
-    return result[0]
+    result = result.pop(0)
+    return result
 
 
 '''
