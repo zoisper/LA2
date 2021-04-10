@@ -60,3 +60,30 @@ def espaca(frase,palavras):
     return result
 
 
+"""
+
+Um ladrão assalta uma casa e, dado que tem uma capacidade de carga limitada, 
+tem que decidir que objectos vai levar por forma a maximizar o potencial lucro. 
+
+Implemente uma função que ajude o ladrão a decidir o que levar.
+A função recebe a capacidade de carga do ladrão (em Kg) seguida de uma lista 
+dos objectos existentes na casa, sendo cada um um triplo com o nome, o valor de 
+venda no mercado negro, e o seu peso. Deve devolver o máximo lucro que o ladrão
+poderá  obter para a capacidade de carga especificada.
+
+"""
+#10%
+
+def aux(capacidade, objectos):
+    if capacidade == 0 or not objectos:
+        return 0
+    elif objectos[0][2] >capacidade:
+        return aux(capacidade, objectos[1:])
+    else: 
+        r1 =  objectos[0][1] + aux(capacidade-objectos[0][2], objectos[1:])
+        r2 =  aux(capacidade, objectos[1:])
+        return max(r1,r2)
+    
+def ladrao(capacidade,objectos):
+    objectos.sort(key=lambda x: x[1], reverse=True)
+    return aux(capacidade, objectos)
