@@ -26,3 +26,37 @@ def crescente(lista):
     for i in range (1,len(lista)+1):
         r = max(r, aux(lista[-i:], lista[-i]))
     return r
+
+"""
+
+Implemente uma função que, dada uma frase cujos espaços foram retirados, 
+tenta recuperar a dita frase. Para além da frase (sem espaços nem pontuação), 
+a função recebe uma lista de palavras válidas a considerar na reconstrução 
+da dita frase. Deverá devolver a maior frase que pode construir inserindo
+espaços na string de entrada e usando apenas as palavras que foram indicadas 
+como válidas. Por maior entende-se a que recupera o maior prefixo da string
+de entrada. Só serão usados testes em que a maior frase é única.
+
+"""
+#9%
+
+def aux(texto, palavra):
+    for i in range (1,len(palavra)+1):
+        if i > len(texto) or (texto[-i] != palavra[-i]):
+            return False
+    return True
+
+def espaca(frase,palavras):
+    result = ""
+    palavras.sort(key=len, reverse=True)
+    while frase:
+        for pal in palavras:
+            if(aux(frase,pal)):
+                result = pal + result
+                frase = frase[:len(frase) -len(pal)]
+                break
+        if len(frase) >0:
+            result = " " + result 
+    return result
+
+
