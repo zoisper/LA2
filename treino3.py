@@ -87,3 +87,45 @@ def aux(capacidade, objectos):
 def ladrao(capacidade,objectos):
     objectos.sort(key=lambda x: x[1], reverse=True)
     return aux(capacidade, objectos)
+
+
+"""
+
+Implemente uma função que determina qual a probabilidade de um robot regressar 
+ao ponto de partido num determinado número de passos. Sempre que o robot dá um 
+passo tem uma determinada probabilidade de seguir para cima ('U'), baixo ('D'), 
+esquerda ('L') ou direita ('R'). A função recebe o número de passos que o 
+robot vai dar e um dicionário com probabilidades de se movimentar em cada uma
+das direcções (as chaves são os caracteres indicados entre parêntesis).
+O resultado deve ser devolvido com a precisao de 2 casas decimais.
+
+"""
+#11%
+
+def aux(passos, probs, pos, dic):
+    if passos == 0:
+        return pos == (0,0)
+    
+    if (passos-1,(pos[0],pos[1]+1)) not in dic:
+        dic[(passos-1,(pos[0],pos[1]+1))] = aux(passos-1, probs, (pos[0],pos[1]+1), dic)
+    u = probs['U']*dic[(passos-1,(pos[0],pos[1]+1))]
+    
+    if (passos-1,(pos[0],pos[1]-1)) not in dic:
+        dic[(passos-1,(pos[0],pos[1]-1))] = aux(passos-1, probs, (pos[0],pos[1]-1), dic)
+    d = probs['D']*dic[(passos-1,(pos[0],pos[1]-1))]
+    
+    if (passos-1,(pos[0]+1,pos[1])) not in dic:
+        dic[(passos-1,(pos[0]+1,pos[1]))] = aux(passos-1, probs, (pos[0]+1,pos[1]), dic)
+    r = probs['R']*dic[(passos-1,(pos[0]+1,pos[1]))]
+    
+    if (passos-1,(pos[0]-1,pos[1])) not in dic:
+        dic[(passos-1,(pos[0]-1,pos[1]))] = aux(passos-1, probs, (pos[0]-1,pos[1]), dic)
+    l = probs['L']*dic[(passos-1,(pos[0]-1,pos[1]))]
+
+    
+    return u+d+r+l
+    
+    
+
+def probabilidade(passos,probs):
+    return round(aux(passos, probs, (0,0), {}),2)
