@@ -129,3 +129,53 @@ def aux(passos, probs, pos, dic):
 
 def probabilidade(passos,probs):
     return round(aux(passos, probs, (0,0), {}),2)
+
+
+"""
+
+Um fugitivo pretende atravessar um campo  no mínimo tempo possível (desde o 
+canto superior esquerdo até ao canto inferior direito). Para tal só se poderá 
+deslocar para a direita ou para baixo. No entanto, enquanto atravessa o campo 
+pretende saquear ao máximo os bens deixados por fugitivos anteriores. Neste 
+problema pretende-se que implemente uma função para determinar qual o máximo 
+valor que o fugitivo consegue saquear enquanto atravessa o campo. 
+A função recebe o mapa rectangular defindo com uma lista de strings. Nestas
+strings o caracter '.' representa um espaço vazio, o caracter '#' representa 
+um muro que não pode ser atravessado, e os digitos sinalizam posições onde há 
+bens abandonados, sendo o valor dos mesmos igual ao digito.
+Deverá devolver o valor máximo que o fugitivo consegue saquear enquanto 
+atravessa o campo deslocando-se apenas para a direita e para baixo. Assuma que 
+é sempre possível atravessar o campo dessa forma.
+
+"""
+#10%
+
+def aux(mapa, pos, fim, dic):
+    if pos == fim:
+        if (mapa[fim[1]][fim[0]]) != '.':
+            return int (mapa[fim[1]][fim[0]])
+        else:
+            return 0
+    if pos not in dic:
+        r = 0
+        d = 0
+        if mapa[pos[1]][pos[0]] != '.':
+            r = int (mapa[pos[1]][pos[0]])
+            d = int (mapa[pos[1]][pos[0]])
+            
+        if pos[0]+1 <= fim[0] and mapa[pos[1]][pos[0]+1] != '#':
+            r += aux(mapa, (pos[0]+1, pos[1]), fim, dic)
+        
+        if pos[1]+1 <= fim[1] and mapa[pos[1]+1][pos[0]] != '#':
+            d += aux(mapa, (pos[0], pos[1]+1), fim, dic)
+        dic[pos] = max(r,d)
+    
+    return dic[pos]
+
+
+def saque(mapa):
+    pos = (0,0)
+    fim = (len(mapa[0])-1, len(mapa)-1)
+    return aux(mapa, pos, fim, {})
+
+ 	
