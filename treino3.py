@@ -211,4 +211,33 @@ def maxsoma(lista):
         soma = max(soma, aux)
     
     return soma
- 	
+
+
+"""
+
+Um exemplo de um problema que pode ser resolvido de forma eficiente com 
+programação dinâmica consiste em determinar, dada uma sequência arbitrária de 
+números não negativos, se existe uma sub-sequência (não necessariamente contígua) 
+cuja soma é um determinado valor. Implemente uma função que dado um valor e uma
+listas de listas de números não negativos, devolva a lista com as listas com uma
+sub-sequência cuja soma é o valor dado.
+
+"""
+#10%
+
+def aux(soma, lista, size):
+    if soma == 0 :
+        return True
+    if size == 0 or soma <0:
+        return False
+    else:
+        return aux(soma - lista[0], lista[1:],size-1) or aux(soma, lista[1:],size-1) 
+    
+
+def validas(soma,listas):
+    result = []
+    for lista in listas:
+        size = len(lista)
+        if aux(soma,lista,size):
+            result.append(lista)
+    return result
