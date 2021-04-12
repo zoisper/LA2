@@ -190,6 +190,8 @@ implementada, é relativamente adaptá-la para devolver também a maior soma de 
 a lista.
 
 """
+#13%
+
 def maxPrefix(lista):
     r = [float("-inf"),0]
     aux = [0,0]
