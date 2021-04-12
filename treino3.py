@@ -178,4 +178,35 @@ def saque(mapa):
     fim = (len(mapa[0])-1, len(mapa)-1)
     return aux(mapa, pos, fim, {})
 
+"""
+
+Implemente uma função que calula qual a subsequência (contígua e não vazia) de 
+uma sequência de inteiros (também não vazia) com a maior soma. A função deve 
+devolver apenas o valor dessa maior soma.
+
+Sugere-se que começe por implementar (usando recursividade) uma função que 
+calcula o prefixo de uma sequência com a maior soma. Tendo essa função 
+implementada, é relativamente adaptá-la para devolver também a maior soma de toda
+a lista.
+
+"""
+def maxPrefix(lista):
+    r = [float("-inf"),0]
+    aux = [0,0]
+    for i in range(len(lista)):
+        aux[0] +=lista[i]
+        aux[1] =i
+        if aux[0] > r[0]:
+            r[0] = aux[0]
+            r[1] = aux[1]
+    return r
+
+def maxsoma(lista):
+    soma, size = maxPrefix(lista)
+    aux = soma
+    for i in range(size):
+        aux -= lista[i]
+        soma = max(soma, aux)
+    
+    return soma
  	
