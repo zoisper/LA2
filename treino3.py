@@ -282,8 +282,11 @@ def vendedor(capacidade,produtos):
     lista = []
     
     while capacidade:
-        lista.append(saco[capacidade][0])
-        capacidade -= saco[capacidade][2]
+        if capacidade in saco:
+            lista.append(saco[capacidade][0])
+            capacidade -= saco[capacidade][2]
+        else:
+            break
     lista.sort()
     
     return (valor,lista)
