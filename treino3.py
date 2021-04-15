@@ -11,21 +11,22 @@ da sequência, sendo o resultado pretendido o máximo obtido aplicando esta
 função a todos os sufixos da sequência de entrada.
 
 """
-#9%
-
-def aux(lista,p):
-    if len(lista) == 0:
-        return 0
-    elif lista[0]>=p:
-        return 1 + aux(lista[1:],lista[0])
-    else:
-        return aux(lista[1:], p)
+#13%
 
 def crescente(lista):
-    r = 0
-    for i in range (1,len(lista)+1):
-        r = max(r, aux(lista[-i:], lista[-i]))
-    return r
+    if not lista:
+        return 0   
+    
+    inferiores = [1 for i in lista]
+
+    for i in range (len(lista)):
+        for j in range(0,i):
+            if lista[i] >= lista[j]:
+                inferiores[i] = max(inferiores[i], inferiores[j] +1)
+                
+    return max(inferiores)
+
+
 
 """
 
