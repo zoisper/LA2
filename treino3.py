@@ -21,7 +21,7 @@ def crescente(lista):
 
     for i in range (len(lista)):
         for j in range(0,i):
-            if lista[i] >= lista[j]:
+            if lista[j] <= lista[i]:
                 inferiores[i] = max(inferiores[i], inferiores[j] +1)
                 
     return max(inferiores)
