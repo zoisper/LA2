@@ -263,6 +263,7 @@ Caso haja 2 produtos com a mesma rentabilidade por peso deverá dar prioridade
 aos produtos que aparecem primeiro na lista de entrada.
 
 """
+#13%
 
 def vendedor(capacidade,produtos):
     d ={}
