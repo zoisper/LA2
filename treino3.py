@@ -39,25 +39,21 @@ como válidas. Por maior entende-se a que recupera o maior prefixo da string
 de entrada. Só serão usados testes em que a maior frase é única.
 
 """
-#9%
-
-def aux(texto, palavra):
-    for i in range (1,len(palavra)+1):
-        if i > len(texto) or (texto[-i] != palavra[-i]):
-            return False
-    return True
+#10%
 
 def espaca(frase,palavras):
     result = ""
-    palavras.sort(key=len, reverse=True)
-    while frase:
-        for pal in palavras:
-            if(aux(frase,pal)):
-                result = pal + result
-                frase = frase[:len(frase) -len(pal)]
-                break
-        if len(frase) >0:
-            result = " " + result 
+    dic = {}
+    for i in range (len(frase)+1):
+        for j in range(0,i):
+            if frase[j:i] in palavras and i not in dic:
+                if j in dic:
+                    dic[i] = dic[j] + " " + frase[j:i]
+                else:
+                    dic[i] = frase[j:i]
+                
+    if dic:
+        result = dic[len(frase)]
     return result
 
 
