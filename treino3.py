@@ -155,8 +155,6 @@ def probabilidade(passos,probs):
 
 
 
-
-
 """
 
 Um fugitivo pretende atravessar um campo  no mínimo tempo possível (desde o 
@@ -249,22 +247,21 @@ listas de listas de números não negativos, devolva a lista com as listas com u
 sub-sequência cuja soma é o valor dado.
 
 """
-#10%
+#13%
 
-def aux(soma, lista, size):
-    if soma == 0 :
-        return True
-    if size == 0 or soma <0:
-        return False
-    else:
-        return aux(soma - lista[0], lista[1:],size-1) or aux(soma, lista[1:],size-1) 
-    
+def aux(soma, lista):
+    conjunto = {0}
+    for i in lista:
+        aux = set()
+        for e in conjunto:
+            aux.add(e+i)
+        conjunto = conjunto | aux
+    return soma in conjunto
 
 def validas(soma,listas):
     result = []
     for lista in listas:
-        size = len(lista)
-        if aux(soma,lista,size):
+        if (aux(soma, lista)):
             result.append(lista)
     return result
 
