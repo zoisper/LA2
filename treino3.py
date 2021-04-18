@@ -84,6 +84,29 @@ def aux(capacidade, objectos):
 def ladrao(capacidade,objectos):
     objectos.sort(key=lambda x: x[1], reverse=True)
     return aux(capacidade, objectos)
+    
+
+def ladrao(capacidade,objectos):
+    dic={}
+    dic[0] = 0
+    escolhidos = {}
+    escolhidos[0] = []
+    for cap in range(1,capacidade+1):
+        valor = 0
+        dic[cap] = 0
+        escolhidos[cap] = []
+        aux = []
+        for obj in objectos:
+            if obj[2] <= cap and obj[0] not in escolhidos[cap - obj[2]]:
+                a = obj[1] + dic[cap - obj[2]]
+                if a > valor:
+                    valor = a
+                    aux = escolhidos[cap - obj[2]] +  [obj[0]]
+        dic[cap] = valor
+        escolhidos[cap] = aux
+            
+        
+    return max(dic.items(), key=lambda x: x[1])[1]
 
 
 """
@@ -97,7 +120,7 @@ das direcções (as chaves são os caracteres indicados entre parêntesis).
 O resultado deve ser devolvido com a precisao de 2 casas decimais.
 
 """
-#11%
+#13%
 
 def aux(passos, probs, pos, dic):
     if passos == 0:
@@ -125,7 +148,13 @@ def aux(passos, probs, pos, dic):
     
 
 def probabilidade(passos,probs):
+    if passos %2 != 0:
+        return 0.0
     return round(aux(passos, probs, (0,0), {}),2)
+
+
+
+
 
 
 """
