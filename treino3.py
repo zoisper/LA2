@@ -172,72 +172,31 @@ atravessa o campo deslocando-se apenas para a direita e para baixo. Assuma que
 é sempre possível atravessar o campo dessa forma.
 
 """
-#10%
-
-def aux(mapa, pos, fim, dic):
-    if pos == fim:
-        if (mapa[fim[1]][fim[0]]) != '.':
-            return int (mapa[fim[1]][fim[0]])
-        else:
-            return 0
-    if pos not in dic:
-        r = 0
-        d = 0
-        if mapa[pos[1]][pos[0]] != '.':
-            r = int (mapa[pos[1]][pos[0]])
-            d = int (mapa[pos[1]][pos[0]])
-            
-        if pos[0]+1 <= fim[0] and mapa[pos[1]][pos[0]+1] != '#':
-            r += aux(mapa, (pos[0]+1, pos[1]), fim, dic)
-        
-        if pos[1]+1 <= fim[1] and mapa[pos[1]+1][pos[0]] != '#':
-            d += aux(mapa, (pos[0], pos[1]+1), fim, dic)
-        dic[pos] = max(r,d)
-    
-    return dic[pos]
-
+#13%
 
 def saque(mapa):
-    pos = (0,0)
-    fim = (len(mapa[0])-1, len(mapa)-1)
-    return aux(mapa, pos, fim, {})
-
-
-def saque(mapa):
-    
     dic = {}
-    fim = (len(mapa[0]), len(mapa))
-    valor = 0
-    if mapa[0][0] != '.':
-        valor = int(mapa[0][0])
-    dic[(0,0)] = valor
-
-    for i in range (1,fim[0]):
-        valor = 0
-        if mapa[0][i] == '#':
-            valor = float("-inf")
-        elif mapa[0][i] != '.':
-            valor = int(mapa[0][i])
-        dic[(0,i)] = dic[(0,i-1)] + valor
-    
-    for i in range (1,fim[1]):
-        valor = 0
-        if mapa[i][0] == '#':
-            valor = float("-inf")
-        elif mapa[i][0] != '.':
-            valor = int(mapa[0][i])
-        dic[(i,0)] = dic[(i-1,0)] + valor
-    
-    for i in range(1,fim[1]):
-        for j in range(1,fim[0]):
+    l=len(mapa[0])
+    c=len(mapa)
+    fim = (l-1,c-1)
+    for i in range(c):
+        for j in range(l):
             valor = 0
             if mapa[i][j] == '#':
-                valor = float("-inf")
-            elif mapa[i][j] != '.':
-                valor = int(mapa[i][j])
-            dic[(i,j)] = valor + max(dic[(i-1,j)], dic[(i,j-1)])
+                dic[(j,i)] = float("-inf")
+            else:
+                if mapa[i][j] != '.':
+                    valor = int(mapa[i][j])
+                if i>0 and j>0:
+                    dic[(j,i)] = valor + max(dic[(j-1,i)], dic[j,i-1])
+                elif i>0:
+                    dic[(j,i)] = valor + dic[(j,i-1)]
+                elif j>0:
+                    dic[(j,i)] = valor + dic[(j-1,i)]
+                else:
+                    dic[(j,i)] = valor
     
-    return dic[(fim[0]-1,fim[1]-1)]
+    return dic[fim]
 """
 
 Implemente uma função que calula qual a subsequência (contígua e não vazia) de 
