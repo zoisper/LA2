@@ -202,6 +202,42 @@ def saque(mapa):
     fim = (len(mapa[0])-1, len(mapa)-1)
     return aux(mapa, pos, fim, {})
 
+
+def saque(mapa):
+    
+    dic = {}
+    fim = (len(mapa[0]), len(mapa))
+    valor = 0
+    if mapa[0][0] != '.':
+        valor = int(mapa[0][0])
+    dic[(0,0)] = valor
+
+    for i in range (1,fim[0]):
+        valor = 0
+        if mapa[0][i] == '#':
+            valor = float("-inf")
+        elif mapa[0][i] != '.':
+            valor = int(mapa[0][i])
+        dic[(0,i)] = dic[(0,i-1)] + valor
+    
+    for i in range (1,fim[1]):
+        valor = 0
+        if mapa[i][0] == '#':
+            valor = float("-inf")
+        elif mapa[i][0] != '.':
+            valor = int(mapa[0][i])
+        dic[(i,0)] = dic[(i-1,0)] + valor
+    
+    for i in range(1,fim[1]):
+        for j in range(1,fim[0]):
+            valor = 0
+            if mapa[i][j] == '#':
+                valor = float("-inf")
+            elif mapa[i][j] != '.':
+                valor = int(mapa[i][j])
+            dic[(i,j)] = valor + max(dic[(i-1,j)], dic[(i,j-1)])
+    
+    return dic[(fim[0]-1,fim[1]-1)]
 """
 
 Implemente uma função que calula qual a subsequência (contígua e não vazia) de 
