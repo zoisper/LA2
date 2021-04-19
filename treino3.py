@@ -46,11 +46,12 @@ def espaca(frase,palavras):
     dic = {}
     for i in range (len(frase)+1):
         for j in range(0,i):
-            if frase[j:i] in palavras and i not in dic:
+            if frase[j:i] in palavras:
                 if j in dic:
                     dic[i] = dic[j] + " " + frase[j:i]
                 else:
                     dic[i] = frase[j:i]
+                break
                 
     if dic:
         result = dic[len(frase)]
