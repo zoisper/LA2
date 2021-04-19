@@ -69,43 +69,27 @@ venda no mercado negro, e o seu peso. Deve devolver o máximo lucro que o ladrã
 poderá  obter para a capacidade de carga especificada.
 
 """
-#10%
-
-def aux(capacidade, objectos):
-    if capacidade == 0 or not objectos:
-        return 0
-    elif objectos[0][2] >capacidade:
-        return aux(capacidade, objectos[1:])
-    else: 
-        r1 =  objectos[0][1] + aux(capacidade-objectos[0][2], objectos[1:])
-        r2 =  aux(capacidade, objectos[1:])
-        return max(r1,r2)
-    
-def ladrao(capacidade,objectos):
-    objectos.sort(key=lambda x: x[1], reverse=True)
-    return aux(capacidade, objectos)
-    
+#13%
 
 def ladrao(capacidade,objectos):
-    dic={}
+    dic = {}
     dic[0] = 0
-    escolhidos = {}
-    escolhidos[0] = []
-    for cap in range(1,capacidade+1):
-        valor = 0
-        dic[cap] = 0
-        escolhidos[cap] = []
-        aux = []
+    possiveis = {}
+    possiveis[0] = objectos.copy()
+    for i in range (1,capacidade+1):
+        r = 0
+        sobram = objectos.copy()
         for obj in objectos:
-            if obj[2] <= cap and obj[0] not in escolhidos[cap - obj[2]]:
-                a = obj[1] + dic[cap - obj[2]]
-                if a > valor:
-                    valor = a
-                    aux = escolhidos[cap - obj[2]] +  [obj[0]]
-        dic[cap] = valor
-        escolhidos[cap] = aux
+            if obj[2] <=i and obj in possiveis[i-obj[2]]:
+                a = dic[i-obj[2]] + obj[1]
+                if a > r:
+                    r = a
+                    sobram = possiveis[i-obj[2]].copy()
+                    sobram.remove(obj)
+        dic[i] = r
+        possiveis[i] = sobram
             
-        
+    
     return max(dic.items(), key=lambda x: x[1])[1]
 
 
