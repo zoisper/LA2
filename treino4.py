@@ -58,6 +58,39 @@ def amigos(conhecidos):
 
 
 
+
+
+def amigos(conhecidos):
+    pessoas = set([c for grupo in conhecidos for c in grupo])
+    
+    for n in range(len(pessoas)+1, 2 ,-1):
+        if aux(conhecidos, pessoas, n, set()):
+            return n
+
+def extensions(conhecidos, pessoas, s):
+    list = [p for p in pessoas if p not in s]
+    for l in list.copy():
+        for p in s:
+            if (l,p) not in conhecidos and (p,l) not in conhecidos:
+                list.remove(l)
+                break
+    return list
+    
+def complete(n, s):
+    return len(s) == n
+
+def aux(conhecidos, pessoas, n, s):
+    if complete(n, s):
+        return True
+    for x in extensions(conhecidos, pessoas, s):
+        s.add(x)
+        if aux(conhecidos, pessoas,n , s):
+            return True
+        s.remove(x)
+    return False
+
+
+
 '''
 Um anel de tamanho n (um número par) consiste numa permutação do números de 1 
 até n em que a soma de quaisquer dois números adjacentes é um número primo
@@ -143,7 +176,7 @@ def aux(arestas, vertices, n, s):
 
 def cobertura(arestas):
     vertices = set([a for aresta in arestas for a in aresta])
-    for n in range(len(vertices)):
+    for n in range(len(vertices)+1):
         if aux(arestas, vertices, n, set()):
             return n
     return 0
@@ -195,3 +228,46 @@ def aux(arestas, vertices, list):
             return list
         list.remove(a)
     return []
+
+
+'''
+
+Implemente uma função que determina quantas permutações dos n primeiros digitos 
+são múltiplas de um dado número d. Por exemplo se n for 3 temos as seguintes 
+permutações: 123, 132, 213, 231, 312, 321. Se neste caso d for 3 então todas 
+as 6 permutações são múltiplas.
+
+'''
+#13%
+
+def constroi(list):
+    r = 0
+    for i in range(len(list)):
+        r *=10
+        r+=list[i]
+    return r
+
+def complete(n, list):
+    return len(list) == n
+
+def valid(d, list):
+    return constroi(list)%d == 0
+
+def extensions(n, list):
+    return [a for a in range(1, n+1) if a not in list]
+
+def aux(n, d, list):
+    if complete(n, list):
+        if valid(d, list):
+            return 1
+        return 0
+    result = 0
+    for x in extensions(n, list):
+        list.append(x)
+        result += aux(n,d, list)
+        list.pop()
+    return result
+
+def multiplos(n,d):
+    list = [1,4,3]
+    return aux(n,d,[])
