@@ -106,4 +106,87 @@ def anel(n):
     return aux([],n)
 
 
+'''
 
+Implemente uma função que calcula o número mínimo de nós de um grafo 
+não orientado que cobrem todas as arestas, ou seja, o tamanho do menor 
+conjunto de nós que contém pelo menos um extremo de cada aresta. 
+A função recebe a lista de todas as arestas do grafo, sendo cada aresta um 
+par de nós.
+
+'''
+
+def cobertura(arestas):
+    extremos = set([a for aresta in arestas for a in aresta])
+    for i in range(len(extremos)+1):
+        if aux(arestas, len(extremos), i, set()):
+            return i
+
+def extensions(arestas,s):
+    list = []
+    for a in arestas:
+        n = set(a) - s
+        if len(n) >0:
+            list.append(n)
+    return list
+        
+
+
+def aux(arestas, numExtremos, tentativas, s):
+    if tentativas == 0:
+        return len(s) == numExtremos
+    for x in extensions(arestas, s):
+        s = s | x
+        if aux(arestas, numExtremos, tentativas-1, s):
+            return True
+        s = s - x
+    return False
+
+
+
+ '''
+
+Um ciclo Hamiltoniano num grafo não orientado é um caminho no grafo que passa
+uma e uma só vez por cada nó e termina no nó onde começou.
+
+Implemente uma função que calcula o menor (em ordem lexicográfica) ciclo 
+Hamiltoniano de um grafo, caso exista. Se não existir deve devolver None.
+
+'''
+#13%
+
+def hamilton(arestas):
+    vertices = set([v for a in arestas for v in a])
+    arestas.sort()
+    for a in vertices:
+        list = aux(arestas, vertices, [a])
+        if list:
+            return list
+    return None
+    
+
+def complete (arestas, vertices, list):
+    if len(list) == len(vertices):
+        if (list[-1], list[0]) in arestas or (list[0], list[-1]) in arestas:
+            return True
+    return False
+
+def extensions(arestas, list):
+    l = []
+    for a in arestas:
+        if a[0] == list[-1] and a[1] not in list:
+            l.append(a[1])
+        if a[1] == list[-1] and a[0] not in list:
+            l.append(a[0])
+    return l
+
+def aux(arestas, vertices, list):
+    if complete(arestas, vertices, list):
+        return list
+    for a in extensions (arestas, list):
+        list.append(a)
+        aux(arestas, vertices, list)
+        if complete(arestas, vertices, list):
+            return list
+        list.remove(a)
+    return []
