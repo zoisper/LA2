@@ -269,5 +269,4 @@ def aux(n, d, list):
     return result
 
 def multiplos(n,d):
-    list = [1,4,3]
     return aux(n,d,[])
