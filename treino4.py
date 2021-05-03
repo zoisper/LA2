@@ -115,33 +115,38 @@ A função recebe a lista de todas as arestas do grafo, sendo cada aresta um
 par de nós.
 
 '''
+#9%
 
-def cobertura(arestas):
-    extremos = set([a for aresta in arestas for a in aresta])
-    for i in range(len(extremos)+1):
-        if aux(arestas, len(extremos), i, set()):
-            return i
+def complete(n, s):
+    return len(s) == n
 
-def extensions(arestas,s):
-    list = []
+def valid(arestas, s):
     for a in arestas:
-        n = set(a) - s
-        if len(n) >0:
-            list.append(n)
-    return list
+        if a[0] not in s and a[1] not in s:
+            return False
+    return True
+
+def extensions(vertices, s):
+    return [a for a in vertices if a not in s]
+
+def aux(arestas, vertices, n, s):
+    if complete(n,s):
+        return valid(arestas, s)
+    for x in extensions(vertices, s):
+        s.add(x)
+        if aux(arestas, vertices, n, s):
+            return True
+        s.remove(x)
+    return False
         
 
 
-def aux(arestas, numExtremos, tentativas, s):
-    if tentativas == 0:
-        return len(s) == numExtremos
-    for x in extensions(arestas, s):
-        s = s | x
-        if aux(arestas, numExtremos, tentativas-1, s):
-            return True
-        s = s - x
-    return False
-
+def cobertura(arestas):
+    vertices = set([a for aresta in arestas for a in aresta])
+    for n in range(len(vertices)):
+        if aux(arestas, vertices, n, set()):
+            return n
+    return 0
 
 
  '''
