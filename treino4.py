@@ -281,9 +281,12 @@ comprar. Deverá devolver o número mínimo de sacos que necessita para levar
 todas as compras.
 
 '''
-#10%
+#11%
 
 def sacos(peso,compras):
+    if len(compras) == 0:
+        return 0
+        
     total = sum(compras)
     minimo = total//peso
     
@@ -307,16 +310,17 @@ def possivel(produto, list):
 def aux(peso, compras, total, list):
     if total == 0:
         return True
-    if(compras):
-        produto = compras[0]
-        if not possivel(produto, list):
-            return False
-        total -= produto
-        for indexSaco in escolhe(produto, list):
-            compras.remove(produto)
-            list[indexSaco] -= produto
-            if aux(peso, compras, total, list):
-                return True
-            list[indexSaco] += produto
-            compras.append(produto)
+    
+    produto = compras[0]
+    if not possivel(produto, list):
         return False
+    for indexSaco in escolhe(produto, list):
+        compras.remove(produto)
+        total -= produto
+        list[indexSaco] -= produto
+        if aux(peso, compras, total, list):
+            return True
+        list[indexSaco] += produto
+        compras.append(produto)
+        total += produto
+    return False
