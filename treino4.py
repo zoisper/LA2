@@ -286,41 +286,131 @@ todas as compras.
 def sacos(peso,compras):
     if len(compras) == 0:
         return 0
-        
-    total = sum(compras)
-    minimo = total//peso
-    
+    minimo = sum(compras)//peso
     for i in range(minimo,len(compras)+1):
-        list = [peso for a in range(i)]
-        if aux(peso, compras, total, list):
+        if aux(peso, compras, [peso]*i):
             return i
             
 
-def escolhe(produto, list):
+def extensions(produto, list):
     return [i for i in range(len(list)) if list[i]-produto >=0]
     
 
-def possivel(produto, list):
-    for i in range(len(list)):
-        if list[i] - produto >=0:
-            return True
-    return False
-    
-
-def aux(peso, compras, total, list):
-    if total == 0:
+def aux(peso, compras, list):
+    if not compras:
         return True
-    
-    produto = compras[0]
-    if not possivel(produto, list):
-        return False
-    for indexSaco in escolhe(produto, list):
-        compras.remove(produto)
-        total -= produto
+    produto = compras.pop()
+    for indexSaco in extensions(produto, list):
         list[indexSaco] -= produto
-        if aux(peso, compras, total, list):
+        if aux(peso, compras, list):
             return True
         list[indexSaco] += produto
-        compras.append(produto)
-        total += produto
+    compras.append(produto)
     return False
+
+
+'''
+
+Implemente uma função que dada uma lista de conjuntos de inteiros determine qual
+o menor número desses conjuntos cuja união é idêntica à união de todos os 
+conjuntos recebidos.
+
+'''
+#8%
+
+def valid(inteiros, list):
+    r = constroi(list)
+    return r == inteiros
+    
+
+def complete(n, list):
+    return len(list) == n
+
+
+def extensions(sets, list):
+    return [s for s in sets if s not in list]
+    
+
+def constroi(sets):
+    r = set()
+    for s in sets:
+        r = r | s
+    return r
+    
+def aux(sets, inteiros, n, list):
+    if complete(n, list):
+        return valid(inteiros, list)
+    for x in extensions(sets, list):
+        list.append(x)
+        if aux(sets, inteiros, n, list):
+            return True
+        list.pop()
+    return False
+
+
+def uniao(sets):
+    inteiros = constroi(sets)
+    if len(sets) == 0:
+        return 0
+    for i in range(len(sets)+1):
+        if aux(sets, inteiros, i, []):
+            return i
+
+
+'''
+
+Implemente um função que calcula a menor string que contém todas as palavras 
+recebidas na lista de input. Assuma que todas as palavras são disjuntas entre si, 
+ou seja, nunca haverá inputs onde uma das palavras está contida noutra.
+
+'''
+#10%
+
+def extensions(strings, ss):
+    return [pal for pal in strings if pal not in ss]
+
+def complete(n, ss):
+    return len(ss) >= n
+
+def valid(strings, ss):
+    for pal in strings:
+        if pal not in ss:
+            return False
+    return True
+
+def junta(ss, pal):
+    r = 0
+    for i in range(1,len(pal)):
+        if ss[-i:] == pal[0:i]:
+            r = i
+    ss = ss + pal[r:]
+    return ss
+    
+def aux(strings, n, ss):
+    if complete(n, ss):
+        if valid(strings, ss):
+            return ss
+        return False
+    for pal in extensions(strings, ss):
+        ant = ss
+        ss = junta(ss, pal)
+        result = aux(strings, n, ss )
+        if result:
+            return result
+        ss = ant
+    return False
+        
+     
+
+def superstring(strings):
+    total = sum(map(len, strings))
+    
+    if total == 0:
+        return ""
+        
+    minimo = len(min(strings, key=len))
+    
+    for i in range(minimo,total +1):
+        result = aux(strings, i, "")
+        if result:
+            return result
