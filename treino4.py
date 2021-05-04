@@ -270,3 +270,51 @@ def aux(n, d, list):
 
 def multiplos(n,d):
     return aux(n,d,[])
+
+'''
+
+Os sacos de um supermercado tem um limite de peso que conseguem levar. 
+Implemente uma função que o ajude a determinar o número mínimo de sacos que 
+necessita para levar todas as compras. A função recebe o peso máximo que os
+sacos conseguem levar e uma lista com os pesos de todos os items que pretende 
+comprar. Deverá devolver o número mínimo de sacos que necessita para levar 
+todas as compras.
+
+'''
+#9%
+
+def sacos(peso,compras):
+    total = sum(compras)
+    minimo = total//peso
+    
+    for i in range(minimo,len(compras)+1):
+        list = [peso for a in range(i)]
+        if aux(peso, compras, total, list, []):
+            return i
+            
+def extensions(compras, escolhidos):
+    return [a for a in range(len(compras)) if a not in escolhidos]
+
+def escolhe(produto, list):
+    for i in range(len(list)):
+        if list[i] - produto >=0:
+            return i
+    return -1
+
+def aux(peso, compras, total, list, escolhidos):
+    if total == 0:
+        return True
+    for indexProduto in extensions(compras, escolhidos):
+        escolhidos.append(indexProduto)
+        indexSaco = escolhe(compras[indexProduto], list)
+        if indexSaco == -1:
+            return False
+        list[indexSaco] -= compras[indexProduto]
+        total -= compras[indexProduto]
+        if aux(peso, compras, total, list, escolhidos):
+            return True
+        escolhidos.pop()
+        list[indexSaco] += compras[indexProduto]
+        total += compras[indexProduto]
+    return False
+        
