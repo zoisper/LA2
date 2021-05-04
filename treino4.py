@@ -364,19 +364,19 @@ recebidas na lista de input. Assuma que todas as palavras são disjuntas entre s
 ou seja, nunca haverá inputs onde uma das palavras está contida noutra.
 
 '''
-#10%
+#11%
 
 def extensions(strings, ss):
     return [pal for pal in strings if pal not in ss]
 
 def complete(n, ss):
-    return len(ss) >= n
+    return len(ss) == n
 
 def valid(strings, ss):
     for pal in strings:
         if pal not in ss:
             return False
-    return True
+    return ss
 
 def junta(ss, pal):
     r = 0
@@ -388,9 +388,7 @@ def junta(ss, pal):
     
 def aux(strings, n, ss):
     if complete(n, ss):
-        if valid(strings, ss):
-            return ss
-        return False
+        return valid(strings, ss)
     for pal in extensions(strings, ss):
         ant = ss
         ss = junta(ss, pal)
