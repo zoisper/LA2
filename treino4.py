@@ -6,88 +6,56 @@ conhecem e deverá devolver o tamanho do maior conjunto de pessoas em que todos
 conhecem todos os outros.
 
 '''
-#8%
+#10%
 
     
-def complete(dic, num):
-    return len(dic) == num
-
-def valid(dic, num):
-    s = set(dic.keys())
-    for pessoa in dic:
-        s = s & dic[pessoa]
-        s.add(pessoa)
-        if len(s) < num:
-            return False
-    return True
-
-def extensions(grafo, dic):
-    list = [l for l in grafo if l not in dic]
-    return list
-        
-
-def aux(grafo, dic, num):
-    if complete(dic, num):
-        return valid(dic, num)
-
-    for x in extensions(grafo, dic):
-        dic[x] = grafo[x]
-        if aux(grafo, dic, num):
-            return True
-        dic.pop(x)
-    return False
-    
-
-
-
-def amigos(conhecidos):
-    
-    grafo =  {}
-    
-    for grupo in conhecidos:
-        for pessoa in grupo:
-            if pessoa not in grafo:
-                grafo[pessoa] = set(grupo) - set([pessoa])
-            else:
-                grafo[pessoa] = grafo[pessoa] | (set(grupo) - set([pessoa]))
+def constroi(lista):
     dic = {}
-    
-    for i in range(len(grafo.keys()), 1, -1):
-        if aux(grafo, dic, i):
-            return i
+    for grupo in lista:
+        for pessoa in grupo:
+            if pessoa not in dic:
+                dic[pessoa] = set(grupo) - {pessoa}
+            else:
+                dic[pessoa] = dic[pessoa] | set(grupo) - {pessoa}
+    return dic
 
 
-
-
-
-def amigos(conhecidos):
-    pessoas = set([c for grupo in conhecidos for c in grupo])
-    
-    for n in range(len(pessoas)+1, 2 ,-1):
-        if aux(conhecidos, pessoas, n, set()):
-            return n
-
-def extensions(conhecidos, pessoas, s):
-    list = [p for p in pessoas if p not in s]
-    for l in list.copy():
-        for p in s:
-            if (l,p) not in conhecidos and (p,l) not in conhecidos:
-                list.remove(l)
-                break
-    return list
-    
-def complete(n, s):
+def complete(n,s):
     return len(s) == n
 
-def aux(conhecidos, pessoas, n, s):
+def extensions(pessoas,s, dic, impossiveis):
+    r = [pessoa for pessoa in pessoas if pessoa not in s and pessoa not in impossiveis]
+    errados = []
+    for i in range(len(r)):
+        for d in s:
+            if r[i] not in dic[d]:
+                errados.append(r[i])         
+                break
+    for i in errados:
+        r.remove(i)
+    return r
+    
+def aux(pessoas, dic, n, s, impossiveis):
     if complete(n, s):
         return True
-    for x in extensions(conhecidos, pessoas, s):
+    for x in extensions(pessoas, s, dic, impossiveis):
         s.add(x)
-        if aux(conhecidos, pessoas,n , s):
+        if aux(pessoas, dic, n, s, impossiveis):
             return True
+        impossiveis.add(x)
         s.remove(x)
     return False
+        
+
+
+def amigos(conhecidos):
+    
+    dic = constroi(conhecidos)
+    pessoas = list(dic.keys())
+    for n in range(len(pessoas)+1,1,-1):
+        if aux(pessoas, dic, n, set(), set()):
+            return n
+
 
 
 
