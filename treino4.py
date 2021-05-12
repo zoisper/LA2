@@ -6,7 +6,7 @@ conhecem e deverá devolver o tamanho do maior conjunto de pessoas em que todos
 conhecem todos os outros.
 
 '''
-#10%
+#11%
 
     
 def constroi(lista):
@@ -52,6 +52,8 @@ def amigos(conhecidos):
     
     dic = constroi(conhecidos)
     pessoas = list(dic.keys())
+    if not pessoas:
+        return 0
     for n in range(len(pessoas)+1,1,-1):
         if aux(pessoas, dic, n, set(), set()):
             return n
