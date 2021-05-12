@@ -281,50 +281,6 @@ def aux(peso, compras, list):
 
 '''
 
-Implemente uma função que dada uma lista de conjuntos de inteiros determine qual
-o menor número desses conjuntos cuja união é idêntica à união de todos os 
-conjuntos recebidos.
-
-'''
-#10%
-
-def complete(n, s):
-    return n == len(s)
-
-def valid (total, s):
-    r = set()
-    for a in s:
-        r = r | a
-    return total == len(r)
-
-def extensions(sets, ultimo):
-    return [a for a in sets if sets.index(a) > ultimo ]
-    
-def aux(sets, total, n, ultimo, s ):
-    if complete(n, s):
-        return valid(total, s)
-    for x in extensions(sets, ultimo):
-        s.append(x)
-        if aux(sets, total, n, sets.index(x), s):
-            return True
-        s.pop()
-    return False
-
-def uniao(sets):
-    total = 0
-    tmp = set()
-    for a in sets:
-        tmp = tmp | a
-    total = len(tmp)
-    for n in range(len(sets)+1):
-        if aux(sets, total, n, -1, []):
-            return n
-    return total
-
-
-
-'''
-
 Implemente um função que calcula a menor string que contém todas as palavras 
 recebidas na lista de input. Assuma que todas as palavras são disjuntas entre si, 
 ou seja, nunca haverá inputs onde uma das palavras está contida noutra.
@@ -378,3 +334,50 @@ def superstring(strings):
         result = aux(strings, i, "")
         if result:
             return result
+            
+
+
+'''
+
+Implemente uma função que dada uma lista de conjuntos de inteiros determine qual
+o menor número desses conjuntos cuja união é idêntica à união de todos os 
+conjuntos recebidos.
+
+'''
+#10%
+
+def complete(n, s):
+    return n == len(s)
+
+def valid (total, s):
+    r = set()
+    for a in s:
+        r = r | a
+    return total == len(r)
+
+def extensions(sets, ultimo):
+    return [a for a in sets if sets.index(a) > ultimo ]
+    
+def aux(sets, total, n, ultimo, s ):
+    if complete(n, s):
+        return valid(total, s)
+    for x in extensions(sets, ultimo):
+        s.append(x)
+        if aux(sets, total, n, sets.index(x), s):
+            return True
+        s.pop()
+    return False
+
+def uniao(sets):
+    total = 0
+    tmp = set()
+    for a in sets:
+        tmp = tmp | a
+    total = len(tmp)
+    for n in range(len(sets)+1):
+        if aux(sets, total, n, -1, []):
+            return n
+    return total
+
+
+
