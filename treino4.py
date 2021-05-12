@@ -116,7 +116,7 @@ A função recebe a lista de todas as arestas do grafo, sendo cada aresta um
 par de nós.
 
 '''
-#9%
+#13%
 
 def complete(n, s):
     return len(s) == n
@@ -127,25 +127,25 @@ def valid(arestas, s):
             return False
     return True
 
-def extensions(vertices, s):
-    return [a for a in vertices if a not in s]
+def extensions(vertices, ultimo):
+    return [a for a in vertices if vertices.index(a) > ultimo]
 
-def aux(arestas, vertices, n, s):
+def aux(arestas, vertices, n, ultimo, s):
     if complete(n,s):
         return valid(arestas, s)
-    for x in extensions(vertices, s):
+    for x in extensions(vertices, ultimo):
         s.add(x)
-        if aux(arestas, vertices, n, s):
+        if aux(arestas, vertices, n, vertices.index(x), s):
             return True
         s.remove(x)
     return False
         
 
-
 def cobertura(arestas):
     vertices = set([a for aresta in arestas for a in aresta])
+    vertices = list(vertices)
     for n in range(len(vertices)+1):
-        if aux(arestas, vertices, n, set()):
+        if aux(arestas, vertices, n, -1, set()):
             return n
     return 0
 
@@ -284,45 +284,41 @@ o menor número desses conjuntos cuja união é idêntica à união de todos os
 conjuntos recebidos.
 
 '''
-#8%
+#10%
 
-def valid(inteiros, list):
-    r = constroi(list)
-    return r == inteiros
-    
+def complete(n, s):
+    return n == len(s)
 
-def complete(n, list):
-    return len(list) == n
-
-
-def extensions(sets, list):
-    return [s for s in sets if s not in list]
-    
-
-def constroi(sets):
+def valid (total, s):
     r = set()
-    for s in sets:
-        r = r | s
-    return r
+    for a in s:
+        r = r | a
+    return total == len(r)
+
+def extensions(sets, ultimo):
+    return [a for a in sets if sets.index(a) > ultimo ]
     
-def aux(sets, inteiros, n, list):
-    if complete(n, list):
-        return valid(inteiros, list)
-    for x in extensions(sets, list):
-        list.append(x)
-        if aux(sets, inteiros, n, list):
+def aux(sets, total, n, ultimo, s ):
+    if complete(n, s):
+        return valid(total, s)
+    for x in extensions(sets, ultimo):
+        s.append(x)
+        if aux(sets, total, n, sets.index(x), s):
             return True
-        list.pop()
+        s.pop()
     return False
 
-
 def uniao(sets):
-    inteiros = constroi(sets)
-    if len(sets) == 0:
-        return 0
-    for i in range(len(sets)+1):
-        if aux(sets, inteiros, i, []):
-            return i
+    total = 0
+    tmp = set()
+    for a in sets:
+        tmp = tmp | a
+    total = len(tmp)
+    for n in range(len(sets)+1):
+        if aux(sets, total, n, -1, []):
+            return n
+    return total
+
 
 
 '''
