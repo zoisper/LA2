@@ -173,7 +173,7 @@ def saque(mapa):
                 if mapa[i][j] != '.':
                     valor = int(mapa[i][j])
                 if i>0 and j>0:
-                    dic[(j,i)] = valor + max(dic[(j-1,i)], dic[j,i-1])
+                    dic[(j,i)] = valor + max(dic[(j-1,i)], dic[(j,i-1)])
                 elif i>0:
                     dic[(j,i)] = valor + dic[(j,i-1)]
                 elif j>0:
@@ -215,6 +215,15 @@ def maxsoma(lista):
         soma = max(soma, aux)
     
     return soma
+
+
+#ou
+
+def maxsoma(lista):
+    somas = [a for a in lista]
+    for i in range(1,len(lista)):
+        somas[i] = max(somas[i-1] + lista[i], somas[i])
+    return max(somas)
 
 
 """
