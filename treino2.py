@@ -111,7 +111,7 @@ def tamanho(ruas):
     grafo = build(ruas)
     for k in grafo:
     	for i in grafo:
-    		for j in grafo[i]:
+    		for j in grafo:
     			if k not in grafo[i] or j not in grafo[k]:
     				grafo[i][j] = float("inf")
     			elif j not in grafo[i]:
